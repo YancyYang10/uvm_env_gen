@@ -1,4 +1,4 @@
-# UVM Generator v1.2 代码解读文档
+# UVM Generator v2.0 代码解读文档
 
 > 适用对象：希望理解 uvm_gen.py 脚本原理的验证工程师
 > 阅读时间：约 30 分钟
@@ -18,7 +18,18 @@
 └─────────────┘      └─────────────┘      └─────────────────┘
 ```
 
-### 1.2 能生成哪些组件？
+### 1.2 v2.0 重大变更
+
+**移除旧格式支持，只支持紧凑格式配置文件。**
+
+| 变更项 | v1.x | v2.0 |
+|--------|------|------|
+| Agent 配置 | `agents` 列表格式 | `agent_types` + `agents` 字典格式 |
+| Interface 格式 | 列表或字典 | 只支持字典格式 |
+| 向后兼容 | 支持 | 不支持 |
+| 错误提示 | 自动迁移 | 直接报错 |
+
+### 1.3 能生成哪些组件？
 
 | 组件类型 | 生成文件 | 说明 |
 |---------|---------|------|
@@ -52,7 +63,8 @@
 │  └─ validate_template_dir()  验证模板目录                  │
 ├────────────────────────────────────────────────────────────┤
 │  配置解析阶段                                               │
-│  ├─ _parse_agent_config()    解析 Agent 配置              │
+│  ├─ _parse_agent_config()    解析 Agent 配置 (只支持新格式) │
+│  ├─ _expand_compact_agents() 展开紧凑 Agent 实例格式       │
 │  ├─ _expand_compact_interfaces() 展开紧凑接口格式          │
 │  └─ _infer_coverage_interface() 推断覆盖率接口             │
 ├────────────────────────────────────────────────────────────┤
@@ -93,6 +105,7 @@ config.yml                    rtl/xxx.v
 │            context (字典)            │
 │   config, agents, items, interfaces │
 │   item_map, if_map, rtl_ports       │
+│   agent_types, agent_instances      │
 └──────────────────┬──────────────────┘
                    │
                    ▼
@@ -130,8 +143,8 @@ class UVMGenerator:
         self.output_dir = self.config.get("output_dir", "uvm_env")
         self.item_map = {}           # item 名称 -> item 配置
         self.if_map = {}             # interface 名称 -> interface 配置
-        self.agent_def_map = {}      # agent 类型定义
-        self.agent_instances = []    # agent 实例列表
+        self.agent_def_map = {}      # agent 类型定义（只生成一套代码）
+        self.agent_instances = []    # agent 实例列表（支持多实例）
 ```
 
 **关键数据结构说明：**
@@ -162,9 +175,9 @@ class UVMGenerator:
 ┌─────────────────────────────────────────────────────┐
 │ 第二层：Schema 验证                                   │
 │   validate_schema()                                 │
-│   - 必需字段检查                                      │
+│   - 必需字段检查 (output_dir, rtl, testbench...)   │
 │   - 字段类型检查                                      │
-│   - 枚举值检查 (active/passive, in/out)             │
+│   - agent_types 必需检查 (v2.0 新增)                │
 └─────────────────────────────────────────────────────┘
                        │
                        ▼
@@ -173,7 +186,7 @@ class UVMGenerator:
 │   validate_config()                                 │
 │   - RTL 配置完整性                                   │
 │   - Testbench 配置完整性                            │
-│   - Agent 与 Interface/Item 关联验证                │
+│   - agent_types 与 interface/item 关联验证          │
 └─────────────────────────────────────────────────────┘
                        │
                        ▼
@@ -186,46 +199,165 @@ class UVMGenerator:
 └─────────────────────────────────────────────────────┘
 ```
 
-### 3.3 Agent 配置解析（支持新旧格式）
+### 3.3 Agent 配置解析（v2.0 紧凑格式）
 
-脚本支持两种 Agent 配置格式：
+**v2.0 只支持新格式：**
 
-**旧格式（向后兼容）：**
 ```yaml
-agents:
-  - name: ahb_master
-    mode: active
-    type: in
-    interface: ahb_if
-    item: ahb_item
-```
-
-**新格式（推荐）：**
-```yaml
+# Step 1: 定义 Agent 类型（只生成一套代码）
 agent_types:
   ahb_master:
     interface: ahb_if
     item: ahb_item
     mode: active
 
+# Step 2: 实例化 Agent（支持多实例）
 agents:
   ahb_master: [agt1, agt2(mode=passive)]
 ```
 
-解析流程：
+**解析流程（简化版）：**
 
 ```python
 def _parse_agent_config(self):
-    if "agent_types" in self.config:
-        # 新格式：类型定义 + 实例列表
-        self._parse_agent_types()
-        self._expand_compact_agents()
+    """解析 Agent 配置，只支持新格式 (agent_types + agents/agent_instances)"""
+
+    # 1. 必须有 agent_types
+    if "agent_types" not in self.config:
+        raise ValueError("Missing 'agent_types' configuration. New format required.")
+
+    # 2. 解析 agent_types（支持列表和字典两种格式）
+    agent_types = self.config["agent_types"]
+    if isinstance(agent_types, list):
+        self.agent_def_map = {a["name"]: a for a in agent_types}
+    else:
+        # 字典格式
+        for type_name, attrs in agent_types.items():
+            self.agent_def_map[type_name] = {
+                "name": type_name,
+                "interface": attrs.get("interface"),
+                "item": attrs.get("item"),
+                "mode": attrs.get("mode", "active")
+            }
+
+    # 3. 解析实例列表
+    if "agent_instances" in self.config:
+        self.agent_instances = self.config["agent_instances"]
     elif "agents" in self.config:
-        # 旧格式：自动迁移
-        self._migrate_legacy_agents()
+        # 紧凑格式: { type_name: [inst1, inst2, ...] }
+        self.agent_instances = self._expand_compact_agents()
+    else:
+        raise ValueError("Missing 'agent_instances' or 'agents' configuration")
 ```
 
-### 3.4 模板渲染核心
+**紧凑格式解析：**
+
+```python
+def _expand_compact_agents(self):
+    """展开紧凑格式的 agents: { type_name: [inst1, inst2(mode=passive)] }"""
+    instances = []
+
+    for type_name, inst_list in self.config.get("agents", {}).items():
+        type_def = self.agent_def_map.get(type_name, {})
+        default_mode = type_def.get("mode", "active")
+
+        for inst_def in inst_list:
+            # 解析 "inst_name" 或 "inst_name(mode=passive)"
+            if isinstance(inst_def, str):
+                match = re.match(r'(\w+)(?:\(mode=(\w+)\))?', inst_def)
+                name = match.group(1)
+                mode = match.group(2) or default_mode
+            elif isinstance(inst_def, dict):
+                name = inst_def.get("name")
+                mode = inst_def.get("mode", default_mode)
+
+            instances.append({
+                "type": type_name,
+                "name": name,
+                "mode": mode,
+                "interface": type_def.get("interface"),
+                "item": type_def.get("item")
+            })
+
+    return instances
+```
+
+### 3.4 Interface 紧凑格式解析
+
+**v2.0 只支持字典格式：**
+
+```yaml
+interfaces:
+  ahb_if:
+    clock: hclk
+    reset: hreset_n
+    signals:
+      haddr: o32      # output [31:0]
+      hrdata: i32     # input [31:0]
+      hready: i       # input
+```
+
+**解析代码：**
+
+```python
+def _expand_compact_interfaces(self):
+    """展开紧凑格式的 interfaces（只支持字典格式）"""
+    interfaces = self.config["interfaces"]
+    expanded = []
+
+    # 只支持字典格式
+    if not isinstance(interfaces, dict):
+        raise ValueError("'interfaces' must be a dict in compact format.")
+
+    for if_name, if_def in interfaces.items():
+        if "signals" in if_def and isinstance(if_def["signals"], dict):
+            # 紧凑格式，展开信号
+            expanded_if = {
+                "name": if_name,
+                "clock": if_def.get("clock"),
+                "reset": if_def.get("reset"),
+                "clk_period": if_def.get("clk_period", "10ns"),
+                "signals": self._parse_compact_signals(if_def["signals"])
+            }
+            expanded.append(expanded_if)
+
+    self.config["interfaces"] = expanded
+    self.if_map = {intf["name"]: intf for intf in expanded}
+```
+
+**信号规格解析：**
+
+```python
+def _parse_compact_signals(self, signals_dict):
+    """解析紧凑信号格式: { name: 'o32' } -> { name, type, dir }
+       o32 = output [31:0], i8 = input [7:0], o1 = output, i = input
+    """
+    result = []
+    for name, spec in signals_dict.items():
+        spec = str(spec).strip()
+
+        # 判断方向
+        if spec.startswith('o'):
+            direction = 'output'
+        elif spec.startswith('i'):
+            direction = 'input'
+        else:
+            direction = 'output'  # 默认
+
+        # 解析位宽
+        width_str = spec[1:] if len(spec) > 1 else '1'
+        try:
+            width = int(width_str)
+            type_str = f"logic[{width-1}:0]" if width > 1 else "logic"
+        except ValueError:
+            type_str = "logic"
+
+        result.append({'name': name, 'dir': direction, 'type': type_str})
+
+    return result
+```
+
+### 3.5 模板渲染核心
 
 ```python
 def render_template(self, template_name, context, output_file):
@@ -244,6 +376,7 @@ def render_template(self, template_name, context, output_file):
 
     # 3. 写入输出文件
     output_path = os.path.join(self.output_dir, output_file)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w") as out:
         out.write(code)
 ```
@@ -265,7 +398,7 @@ class RTLParser:
         with open(self.file_path, 'r') as f:
             content = f.read()
 
-        # 2. 找到模块定义位置
+        # 2. 找到模块定义位置（支持参数化模块）
         module_pos = self._find_module(content)
 
         # 3. 提取端口列表（支持嵌套括号）
@@ -371,11 +504,27 @@ case(get_name())
 endcase
 ```
 
+### 5.4 env.mako 模板解析
+
+使用 `agent_instances` 生成实例声明和连接：
+
+```systemverilog
+// === Agent 实例声明 ===
+% for inst in agent_instances:
+${inst['type']}_agent ${inst['name']}_agt;
+% endfor
+
+// === Agent 实例化 ===
+% for inst in agent_instances:
+${inst['name']}_agt = ${inst['type']}_agent::type_id::create("${inst['name']}_agt", this);
+% endfor
+```
+
 ---
 
 ## 六、配置文件详解
 
-### 6.1 完整配置结构
+### 6.1 完整配置结构（v2.0 紧凑格式）
 
 ```yaml
 # ==================== 全局配置 ====================
@@ -411,6 +560,22 @@ cfg:
   fields:
     - { name: is_active, type: int, rand: false }
 
+# ==================== Agent 类型定义（v2.0 必需）====================
+agent_types:
+  ahb_master:
+    interface: ahb_if
+    item: ahb_item
+    mode: active
+  apb_monitor:
+    interface: apb_if
+    item: apb_item
+    mode: passive
+
+# ==================== Agent 实例化 ====================
+agents:
+  ahb_master: [agt1, agt2(mode=passive)]
+  apb_monitor: [mon1]
+
 # ==================== Items 配置 ====================
 items:
   - name: ahb_item
@@ -419,21 +584,15 @@ items:
     constraints:
       - { name: addr_c, expr: "addr inside {[0:'hFFFF]}" }
 
-# ==================== Interfaces 配置 ====================
+# ==================== Interfaces 配置（紧凑格式）====================
 interfaces:
-  - name: ahb_if
+  ahb_if:
     clock: hclk
     reset: hreset_n
     signals:
-      - { name: haddr, type: "logic[31:0]", dir: output }
-
-# ==================== Agents 配置 ====================
-agents:
-  - name: ahb_master
-    mode: active              # active | passive
-    type: in                  # in | out
-    interface: ahb_if
-    item: ahb_item
+      haddr: o32               # output [31:0]
+      hrdata: i32              # input [31:0]
+      hready: i                # input
 
 # ==================== Scoreboard 配置 ====================
 scoreboard:
@@ -454,25 +613,16 @@ coverage:
             - { name: low, values: "{[0:'h0FFF]}" }
 ```
 
-### 6.2 紧凑格式支持
+### 6.2 信号规格速查表
 
-接口紧凑格式：
-```yaml
-interfaces:
-  ahb_if:
-    clock: hclk
-    reset: hreset_n
-    signals:
-      haddr: o32      # output [31:0]
-      hready: i       # input
-      htrans: o2      # output [1:0]
-```
-
-信号格式解析：
-- `o32` = output [31:0]
-- `i8` = input [7:0]
-- `o1` = output (单比特)
-- `i` = input (单比特)
+| 格式 | 含义 | SystemVerilog 等价 |
+|------|------|-------------------|
+| `o` | 1位输出 | `output logic` |
+| `o32` | 32位输出 | `output logic[31:0]` |
+| `o8` | 8位输出 | `output logic[7:0]` |
+| `i` | 1位输入 | `input logic` |
+| `i32` | 32位输入 | `input logic[31:0]` |
+| `i9` | 9位输入 | `input logic[8:0]` |
 
 ---
 
@@ -496,10 +646,13 @@ def generate(self):
     # 4. 准备渲染上下文
     context = {
         "config": self.config,
-        "agents": self.config.get("agents", []),
+        "agents": self.config.get("agents", {}),
         "agent_types": self.agent_def_map,
         "agent_instances": self.agent_instances,
-        ...
+        "items": self.config.get("items", []),
+        "interfaces": self.config.get("interfaces", []),
+        "item_map": self.item_map,
+        "if_map": self.if_map,
     }
 
     try:
@@ -530,7 +683,7 @@ output_dir/
 │   │   └── xxx_if.sv
 │   ├── items/
 │   │   └── xxx_item.sv
-│   ├── xxx_agent/
+│   ├── xxx_agent/               # 按类型生成（只生成一套）
 │   │   ├── xxx_driver.sv
 │   │   ├── xxx_monitor.sv
 │   │   ├── xxx_sequencer.sv
@@ -576,38 +729,79 @@ python3 uvm_gen.py -c config.yml -d
 ### 8.2 日志输出示例
 
 ```
-2024-01-15 10:00:00 - __main__ - INFO - Loading configuration from: config.yml
-2024-01-15 10:00:00 - __main__ - INFO - Configuration loaded successfully
-2024-01-15 10:00:00 - __main__ - INFO - Template directory validated: /path/to/templates
-2024-01-15 10:00:00 - __main__ - INFO - Output directory: ./uvm_env
-2024-01-15 10:00:00 - __main__ - INFO - Starting UVM environment generation...
-2024-01-15 10:00:00 - __main__ - INFO - Generating data components...
-2024-01-15 10:00:00 - __main__ - INFO - Generated 2 interfaces and 2 items
-2024-01-15 10:00:00 - __main__ - INFO - Generating agents...
-2024-01-15 10:00:00 - __main__ - INFO - Successfully generated agent type: ahb_master
-2024-01-15 10:00:00 - __main__ - INFO - Generation completed successfully!
+2026-04-04 10:00:00 - __main__ - INFO - Loading configuration from: config.yml
+2026-04-04 10:00:00 - __main__ - INFO - Configuration loaded successfully
+2026-04-04 10:00:00 - __main__ - INFO - Using compact agent format (agent_types + agents/agent_instances)
+2026-04-04 10:00:00 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-04-04 10:00:00 - __main__ - INFO - Template directory validated: /path/to/templates
+2026-04-04 10:00:00 - __main__ - INFO - Output directory: ./uvm_env
+2026-04-04 10:00:00 - __main__ - INFO - Starting UVM environment generation...
+2026-04-04 10:00:00 - __main__ - INFO - Generating data components...
+2026-04-04 10:00:00 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-04-04 10:00:00 - __main__ - INFO - Generating agents...
+2026-04-04 10:00:00 - __main__ - INFO - Successfully generated agent type: ahb_master
+2026-04-04 10:00:00 - __main__ - INFO - Generation completed successfully!
 ```
 
 ---
 
 ## 九、常见问题
 
-### Q1: 为什么需要 UVM_GEN_DIR 环境变量？
+### Q1: v2.0 和 v1.x 配置文件有什么区别？
+
+| 配置项 | v1.x | v2.0 |
+|--------|------|------|
+| Agent | `agents` 列表 | `agent_types` + `agents` 字典 |
+| Interface | 列表或字典 | 只支持字典 |
+| 错误处理 | 自动迁移旧格式 | 直接报错 |
+
+### Q2: 为什么需要 UVM_GEN_DIR 环境变量？
 
 用于定位模板目录。脚本会自动检测并设置，无需手动配置。
 
-### Q2: 如何添加自定义模板？
+### Q3: 如何添加自定义模板？
 
 1. 在 `templates/` 目录添加 `.mako` 文件
 2. 在 `generate_xxx()` 方法中添加渲染调用
 
-### Q3: 生成的代码如何修改？
+### Q4: 生成的代码如何修改？
 
 直接修改生成的 `.sv` 文件。重新运行生成器会自动备份原有文件。
 
-### Q4: 如何支持新的接口类型？
+### Q5: 如何支持新的接口类型？
 
 在配置文件的 `interfaces` 部分添加新接口定义即可，无需修改代码。
+
+### Q6: 报错 "Missing 'agent_types' configuration" 怎么办？
+
+v2.0 必须使用新格式配置文件，请添加 `agent_types` 配置项：
+
+```yaml
+agent_types:
+  ahb_master:
+    interface: ahb_if
+    item: ahb_item
+    mode: active
+```
+
+### Q7: 报错 "'interfaces' must be a dict in compact format" 怎么办？
+
+v2.0 的 `interfaces` 必须使用字典格式，不支持列表格式：
+
+```yaml
+# 正确 ✓
+interfaces:
+  ahb_if:
+    clock: hclk
+    signals: { haddr: o32 }
+
+# 错误 ✗
+interfaces:
+  - name: ahb_if
+    clock: hclk
+    signals:
+      - { name: haddr, type: "logic[31:0]", dir: output }
+```
 
 ---
 
@@ -653,5 +847,17 @@ common_templates.append(
 
 ---
 
-*文档版本: v1.0*
-*生成日期: 2026-03-23*
+## 附录：v2.0 代码变更清单
+
+| 方法 | 变更类型 | 说明 |
+|------|----------|------|
+| `_migrate_legacy_agents()` | 删除 | 移除旧格式兼容 |
+| `_parse_agent_config()` | 简化 | 只支持 `agent_types` 新格式 |
+| `_expand_compact_interfaces()` | 简化 | 只支持字典格式 |
+| `validate_config()` | 更新 | 验证 `agent_types` 必需 |
+| `validate_schema()` | 更新 | Schema 更新为新格式 |
+
+---
+
+*文档版本: v2.0*
+*更新日期: 2026-04-04*

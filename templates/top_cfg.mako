@@ -1,14 +1,24 @@
 `ifndef _${config['cfg']['name'].upper()}_SV_
 `define _${config['cfg']['name'].upper()}_SV_
 
+// === DRV_IDLE 枚举定义 ===
+typedef enum bit [1:0] {
+    DRV_IDLE_LAST = 2'b00,  // 保持最后一次驱动值
+    DRV_IDLE_0    = 2'b01,  // 驱动 0 值
+    DRV_IDLE_X    = 2'b10   // 驱动 X 值（释放总线）
+} drv_idle_enum;
+
 class ${config['cfg']['name']} extends uvm_object;
+
+    // === 全局驱动 IDLE 模式配置 ===
+    drv_idle_enum drv_idle_mode = DRV_IDLE_LAST;
 
     // === Agent instance active/passive config ===
     % for inst in agent_instances:
     % if inst['mode'] == 'passive':
-    uvm_active_passive_enum ${inst['name']}_agt_is_active = UVM_PASSIVE;
+    uvm_active_passive_enum ${inst['inst_name']}_is_active = UVM_PASSIVE;
     % else:
-    uvm_active_passive_enum ${inst['name']}_agt_is_active = UVM_ACTIVE;
+    uvm_active_passive_enum ${inst['inst_name']}_is_active = UVM_ACTIVE;
     % endif
     % endfor
 

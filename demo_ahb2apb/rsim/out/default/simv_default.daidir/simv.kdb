@@ -1,0 +1,18 @@
+rc file Version 1.0
+
+[Design]
+COMPILE_PATH=/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim
+SystemC=FALSE
+UUM=FALSE
+KDB=TRUE
+USE_NOVAS_HOME=FALSE
+COSIM=FALSE
+TOP=uvm_custom_install_verdi_recording tb_top 
+ELAB=TRUE
+SIMV_WRAPPER=FALSE
+[vcs]
+RUN_ELABCOM=unset TURBO_LOG_DIR ;\rm -rf /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/elabcomLog ;/eda_tools/synopsys/vcs/O-2018.09-SP2/linux64/bin/elabcom -logdir /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/elabcomLog  -simvdaidir /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir  -lib /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/work  -saveLevel  -elab /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb -simflow -simdir /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb_libs -top 'uvm_custom_install_verdi_recording tb_top'  -Lf work +disable_message+C00380+C00381 +disable_message+C00388+C00389  >& /dev/null  && echo Success >& /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/.elabcomReport || echo Fail >& /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/.elabcomReport; \rm -rf /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/work.lib++ /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb_libs/ 
+
+[Value]
+WREALX=ffff534e50535f58
+WREALZ=ffff534e50535f5a

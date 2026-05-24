@@ -8,9 +8,9 @@ class ${agent['name']}_agent extends uvm_agent;
 
     virtual ${agent['interface']} vif;
 
-    ${agent['name']}_driver     driver;
-    ${agent['name']}_sequencer  sequencer;
-    ${agent['name']}_monitor    monitor;
+    ${agent['name']}_driver     drv_m;
+    ${agent['name']}_sequencer  sqr_m;
+    ${agent['name']}_monitor    mon_m;
 
     // 动态获取实例名对应的配置字段
     protected uvm_active_passive_enum is_active;
@@ -32,22 +32,21 @@ class ${agent['name']}_agent extends uvm_agent;
         end
 
         // 根据实例名获取对应的 is_active 配置
-        // 实例名格式: xxx_agt，对应配置字段: xxx_agt_is_active
         case(get_name())
         % for inst in agent_instances:
         % if inst['type'] == agent['name']:
-            "${inst['name']}_agt": is_active = cfg_m.${inst['name']}_agt_is_active;
+            "${inst['inst_name']}": is_active = cfg_m.${inst['inst_name']}_is_active;
         % endif
         % endfor
             default: is_active = UVM_PASSIVE;  // 默认 passive
         endcase
 
         if(is_active == UVM_ACTIVE) begin
-            driver = ${agent['name']}_driver::type_id::create("driver", this);
-            sequencer = ${agent['name']}_sequencer::type_id::create("sequencer", this);
+            drv_m = ${agent['name']}_driver::type_id::create("drv_m", this);
+            sqr_m = ${agent['name']}_sequencer::type_id::create("sqr_m", this);
         end
 
-        monitor = ${agent['name']}_monitor::type_id::create("monitor", this);
+        mon_m = ${agent['name']}_monitor::type_id::create("mon_m", this);
 
         `uvm_info(get_type_name(),"build_phase done",UVM_LOW);
     endfunction
@@ -56,7 +55,7 @@ class ${agent['name']}_agent extends uvm_agent;
         `uvm_info(get_type_name(),"connect_phase start",UVM_LOW);
 
         if(is_active == UVM_ACTIVE) begin
-            driver.seq_item_port.connect(sequencer.seq_item_export);
+            drv_m.seq_item_port.connect(sqr_m.seq_item_export);
         end
 
         `uvm_info(get_type_name(),"connect_phase done",UVM_LOW);

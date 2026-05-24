@@ -1,0 +1,8 @@
+DPI_STUB_OBJS += ./../out/default/simv_default.daidir/vc_hdrs.o
+./../out/default/simv_default.daidir/vc_hdrs.o: ./../out/default/simv_default.daidir/vc_hdrs.c
+	@$(CC) -I/eda_tools/synopsys/vcs/O-2018.09-SP2/include  -pipe -DVCSMX -DUVM_DPI_DO_TYPE_CHECK -fPIC    -I/eda_tools/synopsys/vcs/O-2018.09-SP2/include  -fPIC -c -o ./../out/default/simv_default.daidir/vc_hdrs.o ./../out/default/simv_default.daidir/vc_hdrs.c
+	@strip -g ./../out/default/simv_default.daidir/vc_hdrs.o
+DPI_WRAPPER_OBJS += uM9F1_0x2aB.o
+uM9F1_0x2aB.o: uM9F1_0x2aB.c
+	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
+

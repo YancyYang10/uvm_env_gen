@@ -55,8 +55,9 @@ class UVMGenerator:
         # 输出信息
         self.logger.info(f"Output directory: {self.output_dir}")
         self.logger.debug(f"Template directory: {self.template_dir}")
-        if "interfaces" in self.config and self.config["interfaces"]:
-            self.logger.debug(f"Example interface clock: {self.if_map['apb_if']['clock']}")
+        if "interfaces" in self.config and self.config["interfaces"] and self.if_map:
+            first_if = list(self.if_map.keys())[0]
+            self.logger.debug(f"Example interface clock: {self.if_map[first_if]['clock']}")
 
     def setup_logging(self, debug=False):
         """设置日志系统"""
@@ -248,21 +249,21 @@ class UVMGenerator:
             if key not in tb_config:
                 raise ValueError(f"Missing required testbench configuration: {key}")
 
-        # 验证agents配置
-        if 'agents' not in self.config:
-            raise ValueError("Missing 'agents' configuration")
+        # 验证agent_types配置（新格式必需）
+        if 'agent_types' not in self.config:
+            raise ValueError("Missing 'agent_types' configuration (new format required)")
 
-        for agent in self.config['agents']:
-            required_agent = ['name', 'mode', 'type', 'interface', 'item']
-            for key in required_agent:
-                if key not in agent:
-                    raise ValueError(f"Missing required agent field: {key}")
+        for type_name, type_def in self.config['agent_types'].items():
+            required_type = ['interface', 'item']
+            for key in required_type:
+                if key not in type_def:
+                    raise ValueError(f"Missing required agent_type field '{key}' in '{type_name}'")
 
             # 验证关联的接口和item
-            if agent['interface'] not in self.if_map:
-                raise ValueError(f"Interface '{agent['interface']}' not found in interfaces")
-            if agent['item'] not in self.item_map:
-                raise ValueError(f"Item '{agent['item']}' not found in items")
+            if type_def['interface'] not in self.if_map:
+                raise ValueError(f"Interface '{type_def['interface']}' not found in interfaces")
+            if type_def['item'] not in self.item_map:
+                raise ValueError(f"Item '{type_def['item']}' not found in items")
 
         self.logger.info("Configuration validation passed")
 
@@ -296,16 +297,13 @@ class UVMGenerator:
                     'sanity_name': {'type': str, 'required': True}
                 }
             },
-            'agents': {
+            'agent_types': {
+                'type': dict,
+                'required': True
+            },
+            'agent_instances': {
                 'type': list,
-                'required': True,
-                'item_schema': {
-                    'name': {'type': str, 'required': True},
-                    'mode': {'type': str, 'required': True, 'enum': ['active', 'passive']},
-                    'type': {'type': str, 'required': True, 'enum': ['in', 'out']},
-                    'interface': {'type': str, 'required': True},
-                    'item': {'type': str, 'required': True}
-                }
+                'required': False  # 可选，可以用紧凑 agents 替代
             }
         }
 
@@ -350,103 +348,207 @@ class UVMGenerator:
             )
         self.logger.info(f"Template directory validated: {self.template_dir}")
 
+    def _map_ports_to_interfaces(self, rtl_ports):
+        """将 DUT 端口映射到 interface 信号
+
+        映射规则：
+        1. 时钟和复位信号：直接连接到顶层信号
+        2. 其他信号：根据信号名在 interface 中查找匹配
+        3. 如果同一 interface 类型有多个实例，标记为 TODO（需手动连接）
+        """
+        port_mapping = []
+
+        # 建立 interface 类型到 vif_name 的映射
+        if_to_vif = {}  # interface_type -> list of vif_names
+        for inst in self.agent_instances:
+            if_name = inst.get('interface', '')
+            vif_name = inst.get('vif_name', '')
+            if if_name and vif_name:
+                if if_name not in if_to_vif:
+                    if_to_vif[if_name] = []
+                if vif_name not in if_to_vif[if_name]:
+                    if_to_vif[if_name].append(vif_name)
+
+        # 收集所有 interface 的信号
+        all_signals = {}
+        for if_name, if_def in self.if_map.items():
+            signals = if_def.get('signals', [])
+            for sig in signals:
+                sig_name = sig.get('name', '')
+                all_signals[sig_name] = {
+                    'interface': if_name,
+                    'direction': sig.get('dir', ''),
+                    'type': sig.get('type', '')
+                }
+
+        for port in rtl_ports:
+            port_name = port['name']
+            port_dir = port['direction']
+
+            # 检查是否为时钟信号
+            if 'clk' in port_name.lower():
+                port_mapping.append({
+                    'name': port_name,
+                    'connection': port_name,
+                    'type': 'clock'
+                })
+            # 检查是否为复位信号
+            elif 'reset' in port_name.lower() or 'rst' in port_name.lower():
+                port_mapping.append({
+                    'name': port_name,
+                    'connection': port_name,
+                    'type': 'reset'
+                })
+            # 在 interface 信号中查找匹配
+            elif port_name in all_signals:
+                sig_info = all_signals[port_name]
+                if_name = sig_info['interface']
+                vif_names = if_to_vif.get(if_name, [])
+
+                # 如果只有一个 vif，直接连接
+                if len(vif_names) == 1:
+                    port_mapping.append({
+                        'name': port_name,
+                        'connection': f"{vif_names[0]}.{port_name}",
+                        'type': 'interface',
+                        'interface': if_name,
+                        'vif_name': vif_names[0]
+                    })
+                # 如果有多个同类型 vif，标记为 TODO（需手动确认连接哪个实例）
+                elif len(vif_names) > 1:
+                    port_mapping.append({
+                        'name': port_name,
+                        'connection': f"/* TODO: connect {port_name} to one of: {', '.join(vif_names)} */",
+                        'type': 'interface_multi',
+                        'interface': if_name,
+                        'vif_names': vif_names
+                    })
+                else:
+                    port_mapping.append({
+                        'name': port_name,
+                        'connection': f"/* TODO: connect {port_name} */",
+                        'type': 'unknown'
+                    })
+            else:
+                # 未找到匹配，需要手动连接
+                port_mapping.append({
+                    'name': port_name,
+                    'connection': f"/* TODO: connect {port_name} */",
+                    'type': 'unknown'
+                })
+
+        return port_mapping
+        """验证模板目录"""
+        if not self.template_dir or not os.path.exists(self.template_dir):
+            raise ValueError(
+                f"Template directory not found: {self.template_dir}. "
+                f"Please set UVM_GEN_DIR environment variable or check templates directory"
+            )
+        self.logger.info(f"Template directory validated: {self.template_dir}")
+
     def _parse_agent_config(self):
-        """解析 Agent 配置，支持新格式(agent_types/agent_instances)和旧格式(agents)"""
+        """解析 Agent 配置，只支持新格式 (agent_types + agent_instances/紧凑agents)"""
         import re
 
-        # 新格式: agent_types + agent_instances
-        if "agent_types" in self.config:
-            self.logger.info("Using new agent format (agent_types + agent_instances)")
+        if "agent_types" not in self.config:
+            raise ValueError("Missing 'agent_types' configuration. New format required (see documentation).")
 
-            # 解析 agent_types (支持列表和字典两种格式)
-            agent_types = self.config["agent_types"]
-            if isinstance(agent_types, list):
-                self.agent_def_map = {a["name"]: a for a in agent_types}
-            else:
-                # 字典格式: { type_name: { interface: ..., item: ... } }
-                for type_name, attrs in agent_types.items():
-                    self.agent_def_map[type_name] = {
-                        "name": type_name,
-                        "interface": attrs.get("interface"),
-                        "item": attrs.get("item"),
-                        "mode": attrs.get("mode", "active")
-                    }
+        self.logger.info("Using compact agent format (agent_types + agents/agent_instances)")
 
-            # 解析 agent_instances 或紧凑格式的 agents
-            if "agent_instances" in self.config:
-                self.agent_instances = self.config["agent_instances"]
-            elif "agents" in self.config:
-                # 紧凑格式: { type_name: [inst1, inst2, ...] }
-                self.agent_instances = self._expand_compact_agents()
+        # 解析 agent_types (支持列表和字典两种格式)
+        agent_types = self.config["agent_types"]
+        if isinstance(agent_types, list):
+            self.agent_def_map = {a["name"]: a for a in agent_types}
+        else:
+            # 字典格式: { type_name: { interface: ..., item: ... } }
+            for type_name, attrs in agent_types.items():
+                self.agent_def_map[type_name] = {
+                    "name": type_name,
+                    "interface": attrs.get("interface"),
+                    "item": attrs.get("item"),
+                    "mode": attrs.get("mode", "active")
+                }
 
-        # 旧格式: agents (向后兼容)
+        # 解析 agent_instances 或紧凑格式的 agents
+        if "agent_instances" in self.config:
+            self.agent_instances = self.config["agent_instances"]
         elif "agents" in self.config:
-            self.logger.info("Using legacy agent format (auto-migrating to new format)")
-            self._migrate_legacy_agents()
+            # 紧凑格式: { type_name: [inst1, inst2, ...] }
+            self.agent_instances = self._expand_compact_agents()
+        else:
+            raise ValueError("Missing 'agent_instances' or 'agents' configuration")
 
         self.logger.info(f"Parsed {len(self.agent_def_map)} agent types, {len(self.agent_instances)} instances")
 
     def _expand_compact_agents(self):
-        """展开紧凑格式的 agents: { type_name: [inst1, inst2(mode=passive)] }"""
+        """展开紧凑格式的 agents: { type_name: [inst1, inst2(mode=passive, type_role=out)] }
+
+        命名规则（用户填写原名，脚本自动添加后缀）：
+        - inst_name: 原名_agt_m (如 ahb_mst -> ahb_mst_agt_m)
+        - vif_name: 原名_vif (如 ahb_mst -> ahb_mst_vif)
+        - sqr_name: 原名_sqr (如 ahb_mst -> ahb_mst_sqr)
+        """
         import re
         instances = []
 
         agents_config = self.config.get("agents", {})
+
         for type_name, inst_list in agents_config.items():
             type_def = self.agent_def_map.get(type_name, {})
             default_mode = type_def.get("mode", "active")
+            default_role = type_def.get("role", "")
+            if_name = type_def.get("interface", "")
 
             for inst_def in inst_list:
-                # 解析 "inst_name" 或 "inst_name(mode=passive)"
+                # 解析 "inst_name" 或 "inst_name(mode=passive, type_role=out)"
                 if isinstance(inst_def, str):
-                    match = re.match(r'(\w+)(?:\(mode=(\w+)\))?', inst_def)
-                    name = match.group(1)
-                    mode = match.group(2) or default_mode
+                    # 扩展正则，支持多参数
+                    match = re.match(r'(\w+)(?:\(([^)]*)\))?', inst_def)
+                    orig_name = match.group(1)
+                    params_str = match.group(2) or ""
+
+                    # 解析参数
+                    mode = default_mode
+                    type_role = default_role
+                    if params_str:
+                        for param in params_str.split(','):
+                            param = param.strip()
+                            if '=' in param:
+                                key, val = param.split('=', 1)
+                                key = key.strip()
+                                val = val.strip()
+                                if key == 'mode':
+                                    mode = val
+                                elif key == 'type_role':
+                                    type_role = val
+                                    self.logger.debug(f"Parsed type_role={type_role} for {orig_name}")
+
                 elif isinstance(inst_def, dict):
-                    name = inst_def.get("name")
+                    orig_name = inst_def.get("name")
                     mode = inst_def.get("mode", default_mode)
+                    type_role = inst_def.get("type_role", default_role)
                 else:
                     continue
 
+                # 脚本自动添加后缀
+                inst_name = f"{orig_name}_agt_m"   # Agent 实例名
+                vif_name = f"{orig_name}_vif"       # Interface vif 名
+                sqr_name = f"{orig_name}_sqr"       # Sequencer handle 名
+
                 instances.append({
                     "type": type_name,
-                    "name": name,
+                    "name": orig_name,           # 用户填写的原名
+                    "inst_name": inst_name,       # Agent 实例名 (原名_agt_m)
+                    "vif_name": vif_name,         # 虚接口名 (原名_vif)
+                    "sqr_name": sqr_name,         # Sequencer handle名 (原名_sqr)
                     "mode": mode,
-                    "interface": type_def.get("interface"),
-                    "item": type_def.get("item")
+                    "interface": if_name,
+                    "item": type_def.get("item"),
+                    "type_role": type_role  # in/out 角色
                 })
 
         return instances
 
-    def _migrate_legacy_agents(self):
-        """向后兼容: 将旧格式 agents 转换为新格式"""
-        legacy = self.config["agents"]
-        seen_types = {}
-
-        for agent in legacy:
-            # 创建唯一类型标识
-            type_key = f"{agent['interface']}_{agent['item']}_{agent['mode']}"
-
-            if type_key not in seen_types:
-                # 去掉 _if 后缀，模板路径会追加 _agent
-                type_name = agent['interface'].replace('_if', '')
-                seen_types[type_key] = type_name
-                self.agent_def_map[type_name] = {
-                    "name": type_name,
-                    "mode": agent["mode"],
-                    "interface": agent["interface"],
-                    "item": agent["item"]
-                }
-
-            # 创建实例
-            self.agent_instances.append({
-                "type": seen_types[type_key],
-                "name": agent["name"],
-                "mode": agent["mode"],
-                "interface": agent["interface"],
-                "item": agent["item"],
-                "type_role": agent.get("type", "in")
-            })
 
     def _parse_compact_signals(self, signals_dict):
         """解析紧凑信号格式: { name: 'o32' } -> { name, type, dir }
@@ -482,20 +584,17 @@ class UVMGenerator:
         return result
 
     def _expand_compact_interfaces(self):
-        """展开紧凑格式的 interfaces"""
+        """展开紧凑格式的 interfaces（只支持字典格式）"""
         if "interfaces" not in self.config:
             return
 
         interfaces = self.config["interfaces"]
         expanded = []
 
-        # 支持两种格式：列表（旧格式）和字典（紧凑格式）
-        if isinstance(interfaces, list):
-            # 旧格式列表，直接使用
-            self.if_map = {intf["name"]: intf for intf in interfaces}
-            return
+        # 只支持字典格式（紧凑格式）
+        if not isinstance(interfaces, dict):
+            raise ValueError("'interfaces' must be a dict in compact format. New format required.")
 
-        # 字典格式（紧凑格式）
         for if_name, if_def in interfaces.items():
             if isinstance(if_def, dict):
                 # 检查是否为紧凑格式
@@ -673,6 +772,9 @@ class UVMGenerator:
             "width": port.get('width', '')
         } for port in rtl_ports]
 
+        # 映射端口到 interface
+        context['port_mapping'] = self._map_ports_to_interfaces(rtl_ports)
+
         try:
             output_file = f"bench/{self.config['testbench']['name']}.sv"
             self.render_template('testbench.mako', context, output_file)
@@ -681,7 +783,11 @@ class UVMGenerator:
             raise
 
     def generate_data_components(self):
-        """生成数据组件（接口和Transaction Items）"""
+        """生成数据组件（接口和Transaction Items）
+
+        将 interface 和 item 放到各自 agent 目录下，避免文件分散。
+        同一个 interface/item 可能被多个 agent 使用，需要去重。
+        """
         self.logger.info("Generating data components...")
 
         # 验证必需的配置
@@ -693,37 +799,42 @@ class UVMGenerator:
             self.logger.warning("No items configuration found")
             return
 
-        # 生成接口
-        self.logger.info("Generating interfaces...")
-        for interface in self.config["interfaces"]:
-            try:
-                interface_name = interface["name"]
-                self.logger.debug(f"Generating interface: {interface_name}")
+        # 记录已生成的 interface 和 item，避免重复
+        generated_interfaces = set()
+        generated_items = set()
 
-                output_pattern = f'uvm_tb/interfaces/{interface["name"]}.sv'
-                output_file = Template(output_pattern).render(config=self.config)
-                self.render_template('interface.mako', {"interface": interface}, output_file)
+        # 遍历 agent_types，将 interface 和 item 放到对应 agent 目录
+        for agent_type, agent_def in self.agent_def_map.items():
+            if_name = agent_def.get("interface", "")
+            item_name = agent_def.get("item", "")
 
-            except Exception as e:
-                self.logger.error(f"Failed to generate interface {interface.get('name', 'unknown')}: {str(e)}")
-                raise
+            # 生成 interface 到 agent 目录
+            if if_name and if_name not in generated_interfaces:
+                if if_name in self.if_map:
+                    interface = self.if_map[if_name]
+                    try:
+                        self.logger.debug(f"Generating interface: {if_name} in {agent_type}_agent")
+                        output_file = f'uvm_tb/{agent_type}_agent/{if_name}.sv'
+                        self.render_template('interface.mako', {"interface": interface}, output_file)
+                        generated_interfaces.add(if_name)
+                    except Exception as e:
+                        self.logger.error(f"Failed to generate interface {if_name}: {str(e)}")
+                        raise
 
-        # 生成Transaction Items
-        self.logger.info("Generating transaction items...")
-        for item in self.config["items"]:
-            try:
-                item_name = item["name"]
-                self.logger.debug(f"Generating item: {item_name}")
+            # 生成 item 到 agent 目录
+            if item_name and item_name not in generated_items:
+                if item_name in self.item_map:
+                    item = self.item_map[item_name]
+                    try:
+                        self.logger.debug(f"Generating item: {item_name} in {agent_type}_agent")
+                        output_file = f'uvm_tb/{agent_type}_agent/{item_name}.sv'
+                        self.render_template('item.mako', {"item": item}, output_file)
+                        generated_items.add(item_name)
+                    except Exception as e:
+                        self.logger.error(f"Failed to generate item {item_name}: {str(e)}")
+                        raise
 
-                output_pattern = f'uvm_tb/items/{item["name"]}.sv'
-                output_file = Template(output_pattern).render(config=self.config)
-                self.render_template('item.mako', {"item": item}, output_file)
-
-            except Exception as e:
-                self.logger.error(f"Failed to generate item {item.get('name', 'unknown')}: {str(e)}")
-                raise
-
-        self.logger.info(f"Generated {len(self.config['interfaces'])} interfaces and {len(self.config['items'])} items")
+        self.logger.info(f"Generated {len(generated_interfaces)} interfaces and {len(generated_items)} items in agent directories")
 
     def generate_scripts(self):
         """生成仿真脚本"""

@@ -1,0 +1,182 @@
+global coverage_group 0 $unit::ahb2apb_coverage::ahb_cov_cg __coverage_ahb2apb_coverage.ahb_cov_cg unused_ahb2apb_coverage_ahb_cov_cg_loop_label $unit 0 1 0 1 $unit::../bench/tb_top.sv::../uvm_tb/ahb2apb_coverage.sv...@2386945701 0  ( 0 
+)
+ 1 1
+ 78 /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/../uvm_tb/ahb2apb_coverage.sv
+ 11 0 0 0 1 0 0 0 0  1
+0
+0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0 0
+ 0
+ 0 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+0
+0
+0
+64
+0
+ 0
+
+3
+0
+1
+0
+ 7 addr_cp 12 0 0 0 0 70 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn 70 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 0 2 32 0 0 1 0 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 3 1 1 0 0 1 1 6 slave0 14 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_0 0 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_1 0 0 0 0 0
+ 1 1 0 0 1 1 6 slave1 15 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_2 0 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_3 0 0 0 0 0
+ 1 1 0 0 1 1 5 other 16 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 8 0 0 0 0 0 0 0 0
+
+ 8 trans_cp 18 0 0 0 0 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_4 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_4 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 0 2 2 0 0 1 0 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 4 1 1 0 0 1 1 4 idle 20 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_0 0 0 0 0 0 0 0
+ 1 1 0 0 1 1 4 busy 21 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_5 0 0 0 0 0 0 0
+ 1 1 0 0 1 1 6 nonseq 22 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_6 0 0 0 0 0 0 0
+ 1 1 0 0 1 1 3 seq 23 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_7 0 0 0 0 0 0 0
+
+ 8 write_cp 25 0 0 0 0 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_8 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_8 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 0 2 1 0 0 1 0 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 2 1 1 0 0 1 1 4 read 27 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_9 0 0 0 0 0 0 0
+ 1 1 0 0 1 1 5 write 28 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_ahb_cov_cg_fn_a 0 0 0 0 0 0 0
+
+ 12 addr_x_write 0 30 0 0 0 0 2 0 2 -1 0 0 0
+ 0
+ 0
+ 0
+ 0 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+end_coverage_group
+global coverage_group 0 $unit::ahb2apb_coverage::apb_cov_cg __coverage_ahb2apb_coverage.apb_cov_cg unused_ahb2apb_coverage_apb_cov_cg_loop_label $unit 0 1 0 1 $unit::../bench/tb_top.sv::../uvm_tb/ahb2apb_coverage.sv...@2386945701 0  ( 0 
+)
+ 0 33 0 0 0 1 0 0 0 0  1
+0
+0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0 0
+ 0
+ 0 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+0
+0
+0
+64
+0
+ 0
+
+2
+0
+0
+0
+ 9 pwrite_cp 34 0 0 0 0 70 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn 70 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 0 2 1 0 0 1 0 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 2 1 1 0 0 1 1 4 read 36 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn_0 0 0 0 0 0 0 0
+ 1 1 0 0 1 1 5 write 37 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn_1 0 0 0 0 0 0 0
+
+ 10 penable_cp 39 0 0 0 0 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn_2 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn_2 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 0 2 1 0 0 1 0 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 2 1 1 0 0 1 1 5 setup 41 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn_0 0 0 0 0 0 0 0
+ 1 1 0 0 1 1 6 access 42 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1 0 0 1 1 1 72 ahb2apb_coverage::_vcs_unit__2386945701_ahb2apb_coverage_apb_cov_cg_fn_1 0 0 0 0 0 0 0
+
+end_coverage_group

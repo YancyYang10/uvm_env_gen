@@ -1,0 +1,6 @@
+@elabcom rc file Version 1.0
+[oh]
+invokeDir = /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim
+hostCommand = -lib /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/work -saveLevel -elab /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb -simflow -simdir /home/IC_verify/script/uvm_gen/demo_ahb2apb/rs\
+im/out/default/simv_default.daidir/kdb_libs -top "uvm_custom_install_verdi_recording tb_top" -Lf work +disable_message+C00380+C00381 +disable_message+C00388+C00389 -SNPS_ELABCOM -saveElab
+simType = VCS

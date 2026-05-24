@@ -1,0 +1,93 @@
+@verdi rc file Version 1.0
+[General]
+saveDB = TRUE
+relativePath = FALSE
+saveSingleView = FALSE
+saveNWaveWinId = 
+VerdiVersion = Verdi_O-2018.09-SP2
+[KeyNote]
+Line1 = Automatic Backup 0
+Line2 = Save Open Database Information: Yes
+Line3 = Path Option: Absolute Paths
+Line4 = Windows Option: All Windows
+[TestBench]
+ConstrViewShow = 0
+InherViewShow = 0
+FSDBMsgShow = 0
+AnnotationShow = 0
+Console = FALSE
+TBHierShow = 1
+TBHierSelectedNode = uvm_test_top.env_m.ahb_mst_agt_m.drv_m
+powerDumped = 0
+[hb]
+postSimFile = /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/sim_tc_sanity_20260405151255.fsdb
+syncTime = 0
+viewport = 0 22 1920 1029 0 0 303 898
+activeNode = "tc_sanity.env_m.ahb_mst_agt_m.drv_m"
+activeScope = "tc_sanity.env_m.ahb_mst_agt_m.drv_m"
+activeFile = "../uvm_tb/ahb_master_agent/ahb_master_driver.sv"
+interactiveMode = False
+viewType = Source
+simulatorMode = False
+sourceBeginLine = 131
+baMode = False
+srcLineNum = True
+AutoWrap = True
+IdentifyFalseLogic = False
+syncSignal = False
+traceMode = Hierarchical
+showTraceInSchema = True
+paMode = False
+funcMode = False
+powerAwareAnnot = True
+amsAnnot = True
+traceCrossHier = True
+DnDtraceCrossHierOnly = True
+traceIncTopPort = False
+leadingZero = False
+signalPane = False
+Scope1 = "tc_sanity.env_m.ahb_mst_agt_m.drv_m"
+Scope2 = "tc_sanity.env_m.ahb_mst_agt_m"
+Scope3 = "tc_sanity.env_m"
+Scope4 = "tb_top.apb_slv0_vif"
+Scope5 = "tb_top.ahb_mst_vif"
+Scope6 = "tb_top.DUT"
+Scope7 = "tb_top.apb_slv4_vif"
+Scope8 = "tc_sanity"
+Scope9 = "uvm_custom_install_verdi_recording"
+Scope10 = "tb_top"
+multipleSelection = 1 18 8 0 0
+sdfCheckUndef = FALSE
+simFlow = FALSE
+[hb.design]
+importCmd = "-dbdir" "/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir" 
+invokeDir = /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default
+[hb.sourceTab.1]
+scope = tc_sanity.env_m.ahb_mst_agt_m.drv_m
+File = /home/IC_verify/script/uvm_gen/demo_ahb2apb/uvm_tb/ahb_master_agent/ahb_master_driver.sv
+Line = 132
+[nMemoryManager]
+WaveformFile = /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/sim_tc_sanity_20260405151255.fsdb
+UserActionNum = 0
+nMemWindowNum = 0
+[wave.0]
+viewPort = 0 27 1920 418 100 65
+primaryWindow = TRUE
+SessionFile = /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/verdiLog/novas_autosave.ses.wave.0
+displayGrid = FALSE
+hierarchicalName = FALSE
+snap = TRUE
+displayLeadingZeros = FALSE
+fixDelta = FALSE
+displayCursorMarker = FALSE
+autoUpdate = FALSE
+highlightGlitchs = FALSE
+waveformSyncCursorMarker = FALSE
+waveformSyncHorizontalRange = FALSE
+waveformSyncVerticalscroll = FALSE
+displayErrors = TRUE
+displayMsgSymbols = TRUE
+showMsgDescriptions = TRUE
+autoFit = FALSE
+displayDeltaY = FALSE
+centerCursor = FALSE

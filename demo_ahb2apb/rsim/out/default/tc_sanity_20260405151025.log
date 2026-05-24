@@ -1,0 +1,214 @@
+Command: /home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default +UVM_TESTNAME=tc_sanity +vcs+initreg+0 +UVM_VERBOSITY=UVM_MEDIUM -cm line+cond+fsm+branch+tgl+assert -cm_name tc_sanity_20260405151025 -cm_hier cm.cfg +ntb_random_seed=20260405151025 +UVM_NO_RELNOTES +licp -ucli -i run.tcl -l out/default/tc_sanity_20260405151025.log
+Chronologic VCS simulator copyright 1991-2018
+Contains Synopsys proprietary information.
+Compiler version O-2018.09-SP2_Full64; Runtime version O-2018.09-SP2_Full64;  Apr  5 15:10 2026
+
+Warning-[MON-RTOPTIGN] Runtime option ignored.
+  Ignoring -cm_hier for runtime. -cm_hier can be passed only at compile 
+  time.No action will be taken for this option at runtime.
+  Please refer to VCS documentation for more information.
+
+ucli% set wave $env(wave)
+1
+ucli% set tc $env(tc)
+tc_sanity
+ucli% set seed $env(seed)
+20260405151025
+ucli% set RESULT_DIR $env(RESULT_DIR)
+out/default
+ucli% if {$env(wave)} {
+    fsdbDumpfile "./${RESULT_DIR}/sim_${tc}_${seed}.fsdb"
+    # "+mda"   - Include multi-dimensional arrays (Memory/Array)
+    # "+struct" - Include structs (optional)
+    fsdbDumpvars 0 tb_top +mda +struct
+}
+*Verdi* Loading libsscore_vcs201809.so
+FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
+(C) 1996 - 2019 by Synopsys, Inc.
+*Verdi* : Create FSDB file './out/default/sim_tc_sanity_20260405151025.fsdb'
+*Verdi* : Begin traversing the scope (tb_top), layer (0).
+*Verdi* : Enable +struct and +mda dumping.
+*Verdi* : End of traversing.
+ucli% run 10ms
+UVM_INFO @ 0: reporter [RNTST] Running test tc_sanity...
+UVM_INFO ../uvm_tc/tc_sanity.sv(23) @ 0: uvm_test_top [tc_sanity] build_phase start
+UVM_INFO ../uvm_tc/tc_base_test.sv(15) @ 0: uvm_test_top [tc_sanity] build_phase start
+UVM_INFO ../uvm_tc/tc_base_test.sv(21) @ 0: uvm_test_top [tc_sanity] build_phase done
+UVM_INFO ../uvm_tc/tc_sanity.sv(26) @ 0: uvm_test_top [tc_sanity] build_phase done
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_agent.sv(25) @ 0: uvm_test_top.env_m.ahb_mst_agt_m [ahb_master_agent] build_phase start
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_agent.sv(47) @ 0: uvm_test_top.env_m.ahb_mst_agt_m [ahb_master_agent] build_phase done
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_driver.sv(30) @ 0: uvm_test_top.env_m.ahb_mst_agt_m.drv_m [ahb_master_driver] build_phase start
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_driver.sv(39) @ 0: uvm_test_top.env_m.ahb_mst_agt_m.drv_m [ahb_master_driver] build_phase done
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_monitor.sv(18) @ 0: uvm_test_top.env_m.ahb_mst_agt_m.mon_m [ahb_master_monitor] build_phase start
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_monitor.sv(27) @ 0: uvm_test_top.env_m.ahb_mst_agt_m.mon_m [ahb_master_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv0_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv0_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv0_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv0_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv0_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv0_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv1_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv1_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv1_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv1_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv1_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv1_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv2_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv2_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv2_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv2_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv2_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv2_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv3_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv3_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv3_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv3_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv3_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv3_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv4_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv4_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv4_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv4_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv4_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv4_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv5_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv5_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv5_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv5_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv5_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv5_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv6_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv6_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv6_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv6_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv6_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv6_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv7_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv7_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv7_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv7_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv7_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv7_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(25) @ 0: uvm_test_top.env_m.apb_slv8_agt_m [apb_slave_agent] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(55) @ 0: uvm_test_top.env_m.apb_slv8_agt_m [apb_slave_agent] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(26) @ 0: uvm_test_top.env_m.apb_slv8_agt_m.drv_m [apb_slave_driver] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(35) @ 0: uvm_test_top.env_m.apb_slv8_agt_m.drv_m [apb_slave_driver] build_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(18) @ 0: uvm_test_top.env_m.apb_slv8_agt_m.mon_m [apb_slave_monitor] build_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(27) @ 0: uvm_test_top.env_m.apb_slv8_agt_m.mon_m [apb_slave_monitor] build_phase done
+UVM_INFO ../uvm_tb/ahb2apb_scoreboard.sv(40) @ 0: uvm_test_top.env_m.scb_m [ahb2apb_scoreboard] build_phase start
+UVM_INFO ../uvm_tb/ahb2apb_scoreboard.sv(46) @ 0: uvm_test_top.env_m.scb_m [ahb2apb_scoreboard] build_phase done
+UVM_INFO ../uvm_tb/virtual_sequencer.sv(26) @ 0: uvm_test_top.env_m.vsqr_m [virtual_sequencer] build_phase start
+UVM_INFO ../uvm_tb/virtual_sequencer.sv(30) @ 0: uvm_test_top.env_m.vsqr_m [virtual_sequencer] build_phase done
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_agent.sv(51) @ 0: uvm_test_top.env_m.ahb_mst_agt_m [ahb_master_agent] connect_phase start
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_agent.sv(57) @ 0: uvm_test_top.env_m.ahb_mst_agt_m [ahb_master_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv0_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv0_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv1_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv1_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv2_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv2_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv3_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv3_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv4_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv4_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv5_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv5_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv6_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv6_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv7_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv7_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(59) @ 0: uvm_test_top.env_m.apb_slv8_agt_m [apb_slave_agent] connect_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_agent.sv(65) @ 0: uvm_test_top.env_m.apb_slv8_agt_m [apb_slave_agent] connect_phase done
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(59) @ 0: uvm_test_top.env_m [ahb2apb_env] === TLM Connection Start ===
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(108) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_exp_imp <- rm_m.apb_slave_item_pred_port [EXPECTED]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(115) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv0_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(117) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv1_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(119) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv2_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(121) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv3_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(123) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv4_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(125) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv5_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(127) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv6_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(129) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv7_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(131) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM: scb_m.apb_slave_item_act_imp <- apb_slv8_agt_m.mon_m.ap [ACTUAL]
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(133) @ 0: uvm_test_top.env_m [ahb2apb_env] TLM CHECK: 9 output agents connected to scoreboard
+UVM_INFO ../uvm_tb/ahb2apb_env.sv(138) @ 0: uvm_test_top.env_m [ahb2apb_env] === TLM Connection Done ===
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_driver.sv(43) @ 0: uvm_test_top.env_m.ahb_mst_agt_m.drv_m [ahb_master_driver] run_phase start
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_driver.sv(62) @ 0: uvm_test_top.env_m.ahb_mst_agt_m.drv_m [ahb_master_driver] Initializing signals...
+UVM_INFO ../uvm_tb/ahb_master_agent/ahb_master_monitor.sv(31) @ 0: uvm_test_top.env_m.ahb_mst_agt_m.mon_m [ahb_master_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv0_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv0_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv0_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv1_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv1_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv1_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv2_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv2_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv2_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv3_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv3_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv3_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv4_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv4_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv4_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv5_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv5_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv5_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv6_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv6_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv6_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv7_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv7_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv7_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(39) @ 0: uvm_test_top.env_m.apb_slv8_agt_m.drv_m [apb_slave_driver] run_phase start
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_driver.sv(58) @ 0: uvm_test_top.env_m.apb_slv8_agt_m.drv_m [apb_slave_driver] Initializing signals...
+UVM_INFO ../uvm_tb/apb_slave_agent/apb_slave_monitor.sv(31) @ 0: uvm_test_top.env_m.apb_slv8_agt_m.mon_m [apb_slave_monitor] run_phase start
+UVM_INFO ../uvm_tc/tc_base_test.sv(36) @ 0: uvm_test_top [tc_sanity] main_phase start
+UVM_INFO ../uvm_tc/tc_base_test.sv(59) @ 0: uvm_test_top [tc_sanity] main_phase done
+UVM_INFO ../uvm_tb/ahb2apb_coverage.sv(90) @ 5000000: uvm_test_top.env_m.cov_m [ahb2apb_coverage] Coverage group ahb_cov: 37.50%
+UVM_INFO ../uvm_tb/ahb2apb_coverage.sv(91) @ 5000000: uvm_test_top.env_m.cov_m [ahb2apb_coverage] Coverage group apb_cov: 0.00%
+UVM_INFO ../uvm_tb/ahb2apb_scoreboard.sv(156) @ 5000000: uvm_test_top.env_m.scb_m [ahb2apb_scoreboard] 
+========================================
+Scoreboard Report
+========================================
+  apb_slave_item: Total=0  Passed=0  Failed=0  Rate=0.00%
+----------------------------------------
+  TOTAL: 0  Passed: 0  Failed: 0  Rate: 0.00%
+========================================
+
+UVM_WARNING ../uvm_tb/ahb2apb_scoreboard.sv(164) @ 5000000: uvm_test_top.env_m.scb_m [ahb2apb_scoreboard] No transactions were compared!
+UVM_INFO ../uvm_tc/tc_base_test.sv(70) @ 5000000: uvm_test_top [tc_sanity] ================
+UVM_INFO ../uvm_tc/tc_base_test.sv(71) @ 5000000: uvm_test_top [tc_sanity] =TEST_CASE_PASS=
+UVM_INFO ../uvm_tc/tc_base_test.sv(72) @ 5000000: uvm_test_top [tc_sanity] ================
+
+UVM_INFO /eda_tools/synopsys/vcs/O-2018.09-SP2/etc/uvm-1.2/base/uvm_report_server.svh(894) @ 5000000: reporter [UVM/REPORT/SERVER] 
+--- UVM Report Summary ---
+
+** Report counts by severity
+UVM_INFO :  140
+UVM_WARNING :    1
+UVM_ERROR :    0
+UVM_FATAL :    0
+** Report counts by id
+[RNTST]     1
+[ahb2apb_coverage]     2
+[ahb2apb_env]    13
+[ahb2apb_scoreboard]     4
+[ahb_master_agent]     4
+[ahb_master_driver]     4
+[ahb_master_monitor]     3
+[apb_slave_agent]    36
+[apb_slave_driver]    36
+[apb_slave_monitor]    27
+[tc_sanity]     9
+[virtual_sequencer]     2
+
+$finish called from file "/eda_tools/synopsys/vcs/O-2018.09-SP2/etc/uvm-1.2/base/uvm_root.svh", line 527.
+$finish at simulation time              5000000
+
+---------------------------------------------------------------------------
+VCS Coverage Metrics: during simulation line, cond, FSM, branch, tgl was monitored
+---------------------------------------------------------------------------
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 5000000 ps
+CPU Time:      0.380 seconds;       Data structure size:   0.8Mb
+Sun Apr  5 15:10:51 2026

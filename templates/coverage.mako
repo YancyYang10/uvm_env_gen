@@ -1,13 +1,22 @@
 `ifndef ${config['coverage']['name'].upper()}_SV
 `define ${config['coverage']['name'].upper()}_SV
 
+<%
+    # 收集 covergroups 中实际使用的接口
+    used_interfaces = []
+    for group in config['coverage']['groups']:
+        if 'interface' in group and len(group['interface']) > 0:
+            if_name = group['interface'][0]
+            if if_name not in used_interfaces:
+                used_interfaces.append(if_name)
+%>
 class ${config['coverage']['name']} extends uvm_component;
     `uvm_component_utils(${config['coverage']['name']})
-    
-    % for intf in interfaces:
-    virtual ${intf['name']} ${intf['name']}_vif;
+
+    % for if_name in used_interfaces:
+    virtual ${if_name} ${if_name}_vif;
     % endfor
-    
+
     % for group in config['coverage']['groups']:
     covergroup ${group['name']}_cg;
       % for cp in group['coverpoints']:
@@ -56,9 +65,9 @@ class ${config['coverage']['name']} extends uvm_component;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-      % for intf in interfaces:
-        if (!uvm_config_db#(virtual ${intf['name']})::get(this, "", "${intf['name']}_vif", ${intf['name']}_vif)) begin
-            `uvm_fatal(get_type_name(), $sformatf("Virtual interface for %s not found!", "${intf['name']}"))
+      % for if_name in used_interfaces:
+        if (!uvm_config_db#(virtual ${if_name})::get(this, "", "${if_name}_vif", ${if_name}_vif)) begin
+            `uvm_fatal(get_type_name(), $sformatf("Virtual interface for %s not found!", "${if_name}"))
         end
       % endfor
     endfunction

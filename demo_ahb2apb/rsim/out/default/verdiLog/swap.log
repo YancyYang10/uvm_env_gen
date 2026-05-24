@@ -1,0 +1,63 @@
+version: (200506)
+
+available memory: 64M bytes
+used memory: 761856 bytes [need 744K bytes if disable swap]
+
+used block: 29 [memory(29) file(0)]
+                 [ 8K(19) 16K(1) 64K(9) { total 744K bytes } ]
+overhead: (9531) bytes for (29) blocks [Average: (328) bytes/block]
+
+write  => 0(times) 0K(bytes) [0K bytes to file]
+read   => 9(times) 246K(bytes) [39K bytes compressed data from file]
+access => 801030(times) 6300M(bytes)
+          [hit ratio: 99.9989%]
+
+time: write(0) read(0)  unit: second
+
+swap file directory: (/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/verdiLog)
+used swap file number: (10)
+
+
+
+swap file manager:
+arrSize: (256)
+idxCnt: (11)
+closeHead: (1)
+closeTail: (10)
+openCnt: (10)
+fid(10): fd(1073741832) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/ahb_master_driver.sv.tdc)
+	size(8466) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(0) cool(9) pos(0)
+fid(9): fd(1073741831) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/ahb_master_agent.sv.tdc)
+	size(4826) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(10) cool(8) pos(0)
+fid(8): fd(1073741830) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/ahb2apb.v.tdc)
+	size(8769) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(9) cool(7) pos(0)
+fid(7): fd(1073741829) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/ahb_master_if.sv.tdc)
+	size(1707) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(8) cool(6) pos(0)
+fid(6): fd(1073741828) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/apb_slave_if.sv.tdc)
+	size(1600) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(7) cool(5) pos(0)
+fid(5): fd(1073741827) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/ahb2apb_env.sv.tdc)
+	size(11212) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(6) cool(4) pos(0)
+fid(4): fd(1073741826) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/tc_sanity.sv.tdc)
+	size(4946) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(5) cool(3) pos(0)
+fid(3): fd(1073741825) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/uvm_custom_install_verdi_recorder.sv.tdc)
+	size(13417) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(4) cool(2) pos(0)
+fid(2): fd(28) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/verdiLog/_swap_0001#296485376#99783)
+	size(0) lastModTime(0) curModTime(1775373234)
+	mode(w+b)	hot(3) cool(1) pos(0)
+fid(1): fd(1073741824) fileName(/home/IC_verify/script/uvm_gen/demo_ahb2apb/rsim/out/default/simv_default.daidir/kdb.elab++/work.lib++/tb_top.sv.tdc)
+	size(5223) lastModTime(1775373183) curModTime(1775373183)
+	mode(rb)	hot(2) cool(0) pos(0)
+fid(0): fd(0) fileName(NULL)
+	mode(NULL)	hot(0) cool(0) pos(0)
+==================================================
+mySelf(165deb70) pre(156ea170) next(0)
+version(200506)
+date(Feb 11 2019 22:10:27)
