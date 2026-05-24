@@ -1,0 +1,130 @@
+output_dir: /home/IC_verify/script/uvm_gen/demo
+
+
+rtl:
+  top_file: "/home/IC_verify/project/axi2apb/axi2apb.v"
+  top_module: "axi_to_apb_bridge "
+  flist: "/home/IC_verify/project/axi2apb/rtl.f"
+#  top_file: "/home/IC_verify/script/uvm_gen/rtl/ahb2apb.v"
+#  top_module: "ahb2apb"
+#  flist: "/home/IC_verify/script/uvm_gen/rtl/rtl.f"
+
+testbench:
+  name: tb_top
+  timescale: "1ns/1ps"
+  dut_instance: "DUT"
+
+test:
+  base_name: tc_base_test
+  sanity_name: tc_sanity
+
+env:
+  name: chip_env
+  has_coverage: true
+  has_scoreboard: true
+  has_ref_model: true
+
+cfg:
+  name: top_cfg
+  fields:
+    - { name: work_mode, type: "logic[31:0]", rand: true }
+    - { name: scb_en, type: int, rand: false }
+
+
+agents:
+  - name: ahb_master_0
+    mode: active            #enum[active, passive]
+    type: in                #enum[in, out]
+    interface: ahb_if       #inside[interfaces]
+    item: ahb_item          #inside[items]
+
+  - name: apb_slave_0
+    mode: passive
+    type: out
+    interface: apb_if
+    item: apb_item
+
+  - name: ahb_master_1
+    mode: active
+    type: out
+    interface: ahb_if
+    item: ahb_item
+
+  - name: apb_slave_1
+    mode: active
+    type: in
+    interface: apb_if
+    item: apb_item
+
+items:
+  - name: ahb_item
+    fields:
+      - { name: addr, type: "logic[31:0]", rand: true }
+      - { name: data, type: "logic[63:0]", rand: true }
+      - { name: burst_type, type: int, rand: true }
+
+  - name: apb_item
+    fields:
+      - { name: paddr, type: "logic[15:0]", rand: false }
+      - { name: pdata, type: "logic[ 7:0]", rand: false }
+
+interfaces:
+  - name: ahb_if
+    clock: aclk
+    clk_period: 10ns
+    reset: hrst_n
+    signals:
+      - { name: haddr, type: "logic[31:0]", dir: output }
+      - { name: hsel, type: "logic", dir: output }
+      - { name: hburst, type: "logic[1:0]", dir: output }
+      - { name: hwdata, type: "logic[63:0]", dir: output }
+      - { name: hrdata, type: "logic[63:0]", dir: input }
+
+  - name: apb_if
+    clock: pclk
+    clk_period: 30ns
+    reset: preset_n
+    signals:
+      - { name: psel, type: logic, dir: output }
+      - { name: penable, type: logic, dir: output }
+      - { name: pwrite, type: logic, dir: output }
+      - { name: paddr, type: logic, dir: output }
+      - { name: prdata, type: "logic[31:0]", dir: input }
+      - { name: pwdata, type: "logic[31:0]", dir: output }
+
+ref_model:
+  name: chip_ref_model
+  input_item: [ahb_item, apb_item]
+  predicted_type: [apb_item, ahb_item]
+
+scoreboard:
+  name: chip_scoreboard
+  actual_type: [apb_item, ahb_item]
+  expected_type: [apb_item, ahb_item]
+  compare_method: "byte_compare"
+  error_tolerance: 0
+
+coverage:
+  name: chip_coverage
+  groups:
+    - name: ahb_cov
+      interface: [ahb_if, aclk, hrst_n] #[interface_name, sample_clk_name, rst_name]
+      coverpoints:
+        - name: addr_cp
+          expr: "haddr"
+          
+        - name: burst_cp
+          expr: "hburst"
+          
+      crosses:
+        - name: addr_x_burst
+          points: [addr_cp, burst_cp]
+          
+    - name: apb_cov
+      interface: [apb_if, pclk, preset_n] #[interface_name, sample_clk_name, rst_name]
+      coverpoints:
+        - name: psel_cp
+          expr: "psel"
+          
+        - name: paddr_cp
+          expr: "paddr"
