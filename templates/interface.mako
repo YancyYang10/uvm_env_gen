@@ -9,6 +9,7 @@ interface ${interface['name']}(input bit ${interface['clock']}, ${interface['res
     // Clocking blocks
     clocking drv_cb @(posedge ${interface['clock']});
         default input #1ps output #1ps;
+        input ${interface['reset']};
     % for sig in interface['signals']:
     % if "dir" in sig and sig['dir'] in ["input", "inout"]:
         input ${sig['name']};
@@ -21,6 +22,7 @@ interface ${interface['name']}(input bit ${interface['clock']}, ${interface['res
 
     clocking mon_cb @(posedge ${interface['clock']});
         default input #1ps output #1ps;
+        input ${interface['reset']};
     % for sig in interface['signals']:
         input ${sig['name']};
     % endfor

@@ -7,6 +7,9 @@ import logging
 import sys
 from rtl_parser import RTLParser
 
+# 获取脚本所在目录（用于环境变量校验）
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 class UVMGenerator:
     def __init__(self, config_path, debug=False):
         # 设置日志系统
@@ -14,22 +17,34 @@ class UVMGenerator:
         self.logger = logging.getLogger(__name__)
         self.verilog_files = []
 
+        # 检查并验证 UVM_GEN_DIR 环境变量
+        self._validate_environment()
+
         # 设置模板目录
         self.template_dir = str(os.getenv('UVM_GEN_DIR', ""))+"/templates"
 
-        # 加载配置
+        # 加载配置（带安全检查）
         self.config = self.load_config(config_path)
 
         # 初始化变量
         self.output_dir = self.config.get("output_dir", "uvm_env")
         self.item_map = {}
         self.if_map = {}
+        self.agent_def_map = {}      # Agent 类型定义
+        self.agent_instances = []    # Agent 实例列表
 
         # 映射配置
         if "items" in self.config:
             self.item_map = {item["name"]: item for item in self.config["items"]}
         if "interfaces" in self.config:
-            self.if_map = {interface["name"]: interface for interface in self.config["interfaces"]}
+            # 支持紧凑格式的 interfaces
+            self._expand_compact_interfaces()
+
+        # 解析 Agent 配置 (支持新格式和旧格式)
+        self._parse_agent_config()
+
+        # 推断 coverage interface (支持简化格式)
+        self._infer_coverage_interface()
 
         # 验证配置
         self.validate_config()
@@ -55,9 +70,55 @@ class UVMGenerator:
             ]
         )
 
+    def _validate_environment(self):
+        """验证 UVM_GEN_DIR 环境变量设置正确"""
+        uvm_gen_dir = os.getenv('UVM_GEN_DIR', '')
+
+        # 检查环境变量是否设置
+        if not uvm_gen_dir:
+            self.logger.info(
+                "UVM_GEN_DIR environment variable not set. "
+                f"Auto-setting to script directory: {_SCRIPT_DIR}"
+            )
+            os.environ['UVM_GEN_DIR'] = _SCRIPT_DIR
+            return
+
+        # 检查环境变量指向的目录是否存在
+        if not os.path.exists(uvm_gen_dir):
+            self.logger.warning(
+                f"UVM_GEN_DIR points to non-existent directory: {uvm_gen_dir}. "
+                f"Falling back to script directory: {_SCRIPT_DIR}"
+            )
+            os.environ['UVM_GEN_DIR'] = _SCRIPT_DIR
+            return
+
+        # 检查 templates 子目录是否存在
+        templates_dir = os.path.join(uvm_gen_dir, 'templates')
+        if not os.path.exists(templates_dir):
+            self.logger.warning(
+                f"Templates directory not found in UVM_GEN_DIR: {templates_dir}. "
+                f"Falling back to script directory: {_SCRIPT_DIR}"
+            )
+            os.environ['UVM_GEN_DIR'] = _SCRIPT_DIR
+            return
+
+        # 环境变量与脚本目录不匹配时自动修正
+        if os.path.normpath(uvm_gen_dir) != os.path.normpath(_SCRIPT_DIR):
+            self.logger.warning(
+                f"UVM_GEN_DIR ({uvm_gen_dir}) does not match script directory ({_SCRIPT_DIR}). "
+                f"Auto-correcting to script directory to prevent template version mismatch."
+            )
+            os.environ['UVM_GEN_DIR'] = _SCRIPT_DIR
+            return
+
+        self.logger.debug(f"UVM_GEN_DIR validated: {uvm_gen_dir}")
+
     def load_config(self, config_path):
         """加载并验证配置文件"""
         self.logger.info(f"Loading configuration from: {config_path}")
+
+        # 安全检查：配置文件路径
+        self._validate_config_path(config_path)
 
         try:
             with open(config_path, 'r') as f:
@@ -85,6 +146,84 @@ class UVMGenerator:
             raise ValueError(f"YAML parsing error: {str(e)}")
         except Exception as e:
             raise ValueError(f"Error loading configuration: {str(e)}")
+
+    def _validate_config_path(self, config_path):
+        """验证配置文件路径安全性"""
+        # 检查路径是否存在
+        if not os.path.exists(config_path):
+            raise ValueError(f"Configuration file not found: {config_path}")
+
+        # 检查是否为文件（而非目录）
+        if not os.path.isfile(config_path):
+            raise ValueError(f"Configuration path is not a file: {config_path}")
+
+        # 检查文件扩展名
+        if not config_path.endswith(('.yml', '.yaml')):
+            self.logger.warning(
+                f"Configuration file does not have .yml/.yaml extension: {config_path}"
+            )
+
+        # 检查文件权限（可读）
+        if not os.access(config_path, os.R_OK):
+            raise ValueError(f"Configuration file not readable: {config_path}")
+
+        # 检查文件大小（防止加载超大文件）
+        file_size = os.path.getsize(config_path)
+        max_size = 10 * 1024 * 1024  # 10MB
+        if file_size > max_size:
+            raise ValueError(
+                f"Configuration file too large ({file_size} bytes). "
+                f"Maximum allowed: {max_size} bytes"
+            )
+
+        self.logger.debug(f"Config file validated: {config_path} ({file_size} bytes)")
+
+    def _validate_output_dir(self):
+        """验证输出目录安全性"""
+        output_dir = self.output_dir
+
+        # 解析为绝对路径
+        abs_output_dir = os.path.abspath(output_dir)
+
+        # 危险目录列表（不允许作为输出目录）
+        dangerous_dirs = [
+            '/', '/root', '/home', '/etc', '/usr', '/var', '/bin', '/sbin',
+            '/lib', '/lib64', '/boot', '/dev', '/proc', '/sys'
+        ]
+
+        for dangerous_dir in dangerous_dirs:
+            if os.path.normpath(abs_output_dir) == os.path.normpath(dangerous_dir):
+                raise ValueError(
+                    f"Output directory cannot be a system directory: {output_dir}"
+                )
+
+        # 检查输出目录是否在脚本目录内（可选警告）
+        if abs_output_dir.startswith(_SCRIPT_DIR):
+            self.logger.warning(
+                f"Output directory is inside script directory. "
+                f"This may cause issues with version control."
+            )
+
+        # 检查父目录是否存在且可写
+        parent_dir = os.path.dirname(abs_output_dir)
+        if os.path.exists(parent_dir):
+            if not os.access(parent_dir, os.W_OK):
+                raise ValueError(
+                    f"Parent directory not writable: {parent_dir}"
+                )
+        else:
+            raise ValueError(
+                f"Parent directory does not exist: {parent_dir}"
+            )
+
+        # 检查输出目录名称是否合法
+        dir_name = os.path.basename(abs_output_dir)
+        if not dir_name or dir_name.startswith('.') or '..' in dir_name:
+            raise ValueError(
+                f"Invalid output directory name: {dir_name}"
+            )
+
+        self.logger.debug(f"Output directory validated: {abs_output_dir}")
 
     def validate_config(self):
         """验证配置文件内容"""
@@ -211,6 +350,197 @@ class UVMGenerator:
             )
         self.logger.info(f"Template directory validated: {self.template_dir}")
 
+    def _parse_agent_config(self):
+        """解析 Agent 配置，支持新格式(agent_types/agent_instances)和旧格式(agents)"""
+        import re
+
+        # 新格式: agent_types + agent_instances
+        if "agent_types" in self.config:
+            self.logger.info("Using new agent format (agent_types + agent_instances)")
+
+            # 解析 agent_types (支持列表和字典两种格式)
+            agent_types = self.config["agent_types"]
+            if isinstance(agent_types, list):
+                self.agent_def_map = {a["name"]: a for a in agent_types}
+            else:
+                # 字典格式: { type_name: { interface: ..., item: ... } }
+                for type_name, attrs in agent_types.items():
+                    self.agent_def_map[type_name] = {
+                        "name": type_name,
+                        "interface": attrs.get("interface"),
+                        "item": attrs.get("item"),
+                        "mode": attrs.get("mode", "active")
+                    }
+
+            # 解析 agent_instances 或紧凑格式的 agents
+            if "agent_instances" in self.config:
+                self.agent_instances = self.config["agent_instances"]
+            elif "agents" in self.config:
+                # 紧凑格式: { type_name: [inst1, inst2, ...] }
+                self.agent_instances = self._expand_compact_agents()
+
+        # 旧格式: agents (向后兼容)
+        elif "agents" in self.config:
+            self.logger.info("Using legacy agent format (auto-migrating to new format)")
+            self._migrate_legacy_agents()
+
+        self.logger.info(f"Parsed {len(self.agent_def_map)} agent types, {len(self.agent_instances)} instances")
+
+    def _expand_compact_agents(self):
+        """展开紧凑格式的 agents: { type_name: [inst1, inst2(mode=passive)] }"""
+        import re
+        instances = []
+
+        agents_config = self.config.get("agents", {})
+        for type_name, inst_list in agents_config.items():
+            type_def = self.agent_def_map.get(type_name, {})
+            default_mode = type_def.get("mode", "active")
+
+            for inst_def in inst_list:
+                # 解析 "inst_name" 或 "inst_name(mode=passive)"
+                if isinstance(inst_def, str):
+                    match = re.match(r'(\w+)(?:\(mode=(\w+)\))?', inst_def)
+                    name = match.group(1)
+                    mode = match.group(2) or default_mode
+                elif isinstance(inst_def, dict):
+                    name = inst_def.get("name")
+                    mode = inst_def.get("mode", default_mode)
+                else:
+                    continue
+
+                instances.append({
+                    "type": type_name,
+                    "name": name,
+                    "mode": mode,
+                    "interface": type_def.get("interface"),
+                    "item": type_def.get("item")
+                })
+
+        return instances
+
+    def _migrate_legacy_agents(self):
+        """向后兼容: 将旧格式 agents 转换为新格式"""
+        legacy = self.config["agents"]
+        seen_types = {}
+
+        for agent in legacy:
+            # 创建唯一类型标识
+            type_key = f"{agent['interface']}_{agent['item']}_{agent['mode']}"
+
+            if type_key not in seen_types:
+                # 去掉 _if 后缀，模板路径会追加 _agent
+                type_name = agent['interface'].replace('_if', '')
+                seen_types[type_key] = type_name
+                self.agent_def_map[type_name] = {
+                    "name": type_name,
+                    "mode": agent["mode"],
+                    "interface": agent["interface"],
+                    "item": agent["item"]
+                }
+
+            # 创建实例
+            self.agent_instances.append({
+                "type": seen_types[type_key],
+                "name": agent["name"],
+                "mode": agent["mode"],
+                "interface": agent["interface"],
+                "item": agent["item"],
+                "type_role": agent.get("type", "in")
+            })
+
+    def _parse_compact_signals(self, signals_dict):
+        """解析紧凑信号格式: { name: 'o32' } -> { name, type, dir }
+           o32 = output [31:0], i8 = input [7:0], o1 = output, i = input
+        """
+        result = []
+        for name, spec in signals_dict.items():
+            spec = str(spec).strip()
+            # 判断方向
+            if spec.startswith('o'):
+                direction = 'output'
+            elif spec.startswith('i'):
+                direction = 'input'
+            else:
+                direction = 'output'  # 默认
+
+            # 解析位宽
+            width_str = spec[1:] if len(spec) > 1 else '1'
+            try:
+                width = int(width_str)
+                if width > 1:
+                    type_str = f"logic[{width-1}:0]"
+                else:
+                    type_str = "logic"
+            except ValueError:
+                type_str = "logic"
+
+            result.append({
+                'name': name,
+                'dir': direction,
+                'type': type_str
+            })
+        return result
+
+    def _expand_compact_interfaces(self):
+        """展开紧凑格式的 interfaces"""
+        if "interfaces" not in self.config:
+            return
+
+        interfaces = self.config["interfaces"]
+        expanded = []
+
+        # 支持两种格式：列表（旧格式）和字典（紧凑格式）
+        if isinstance(interfaces, list):
+            # 旧格式列表，直接使用
+            self.if_map = {intf["name"]: intf for intf in interfaces}
+            return
+
+        # 字典格式（紧凑格式）
+        for if_name, if_def in interfaces.items():
+            if isinstance(if_def, dict):
+                # 检查是否为紧凑格式
+                if "signals" in if_def and isinstance(if_def["signals"], dict):
+                    # 紧凑格式，需要展开
+                    expanded_if = {
+                        "name": if_name,
+                        "clock": if_def.get("clock"),
+                        "reset": if_def.get("reset"),
+                        "clk_period": if_def.get("clk_period", "10ns"),
+                        "signals": self._parse_compact_signals(if_def["signals"])
+                    }
+                    expanded.append(expanded_if)
+                else:
+                    # 标准格式
+                    if_def["name"] = if_name
+                    expanded.append(if_def)
+
+        # 更新配置
+        self.config["interfaces"] = expanded
+        self.if_map = {intf["name"]: intf for intf in expanded}
+
+    def _infer_coverage_interface(self):
+        """从 interface 定义推断 coverage 的 clock/reset"""
+        if "coverage" not in self.config:
+            return
+
+        coverage = self.config["coverage"]
+
+        # 处理简化格式: { interface_name: [coverpoints] }
+        if "groups" not in coverage:
+            groups = []
+            for if_name, coverpoints in coverage.items():
+                if if_name in ["name"]:  # 跳过非 interface 键
+                    continue
+                if if_name in self.if_map:
+                    intf = self.if_map[if_name]
+                    group = {
+                        "name": f"{if_name}_cov",
+                        "interface": [if_name, intf.get("clock", "clk"), intf.get("reset", "rst_n")],
+                        "coverpoints": coverpoints
+                    }
+                    groups.append(group)
+            coverage["groups"] = groups
+
     def render_template(self, template_name, context, output_file):
         """渲染模板并输出文件"""
         try:
@@ -241,7 +571,7 @@ class UVMGenerator:
             raise ValueError(f"Error rendering template {template_name}: {str(e)}")
 
     def generate_agents(self, context):
-        """生成所有Agent组件"""
+        """生成所有Agent组件 (只生成一套代码，支持多实例)"""
         self.logger.info("Generating agents...")
         agent_templates = [
             ('driver.mako', 'uvm_tb/${name}_agent/${name}_driver.sv'),
@@ -251,16 +581,16 @@ class UVMGenerator:
             ('sequence.mako', 'uvm_tc/seq/${name}_sequence.sv')
         ]
 
-        for agent in self.config["agents"]:
+        # 遍历 agent 类型定义 (只生成一套代码)
+        for type_name, agent_def in self.agent_def_map.items():
             try:
-                agent_name = agent["name"]
-                self.logger.debug(f"Generating agent: {agent_name}")
+                self.logger.debug(f"Generating agent type: {type_name}")
 
-                item_name = agent["item"]
-                if_name = agent["interface"]
+                item_name = agent_def["item"]
+                if_name = agent_def["interface"]
 
                 ctx = {
-                    "agent": agent,
+                    "agent": agent_def,
                     "item": self.item_map[item_name],
                     "item_name": item_name,
                     "intf": self.if_map[if_name],
@@ -270,13 +600,13 @@ class UVMGenerator:
 
                 for tpl, pattern in agent_templates:
                     try:
-                        output_file = Template(pattern).render(**agent)
+                        output_file = Template(pattern).render(name=type_name)
                         self.render_template(tpl, ctx, output_file)
                     except Exception as e:
-                        self.logger.error(f"Failed to generate {agent_name} {tpl}: {str(e)}")
+                        self.logger.error(f"Failed to generate {type_name} {tpl}: {str(e)}")
                         raise
 
-                self.logger.info(f"Successfully generated agent: {agent_name}")
+                self.logger.info(f"Successfully generated agent type: {type_name}")
 
             except Exception as e:
                 self.logger.error(f"Error generating agent: {str(e)}")
@@ -307,11 +637,7 @@ class UVMGenerator:
             try:
                 output_file = Template(output_pattern).render(config=self.config)
                 self.render_template(tpl, context, output_file)
-
-                if tpl == 'top_cfg.mako':
-                    self.verilog_files.insert(0, output_file)
-                else:
-                    self.verilog_files.append(output_file)
+                # render_template 已经添加到 verilog_files，无需重复添加
 
             except Exception as e:
                 self.logger.error(f"Failed to generate {tpl}: {str(e)}")
@@ -436,8 +762,24 @@ class UVMGenerator:
         # 生成tb.f文件
         try:
             tb_path = os.path.join(rsim_dir, "tb.f")
+            # 去重并保持顺序
+            seen = set()
+            unique_files = []
+            top_cfg_file = None
+            for sv_file in self.verilog_files:
+                if sv_file not in seen:
+                    seen.add(sv_file)
+                    # 检查是否为 top_cfg
+                    if 'top_cfg' in sv_file or sv_file.endswith('top_cfg.sv'):
+                        top_cfg_file = sv_file
+                    else:
+                        unique_files.append(sv_file)
+            # top_cfg 放在最前面
+            if top_cfg_file:
+                unique_files.insert(0, top_cfg_file)
+
             with open(tb_path, "w") as flist_file:
-                for sv_file in self.verilog_files:
+                for sv_file in unique_files:
                     flist_file.write(f"../{sv_file}\n")
             self.logger.info("Generated tb.f")
         except Exception as e:
@@ -509,6 +851,9 @@ class UVMGenerator:
         """生成整个UVM环境"""
         self.logger.info("Starting UVM environment generation...")
 
+        # 安全检查：验证输出目录
+        self._validate_output_dir()
+
         # 检查输出目录是否存在，如果存在则备份
         if os.path.exists(self.output_dir):
             backup_dir = f"{self.output_dir}_backup_{os.path.basename(self.config['rtl']['top_module'])}"
@@ -534,7 +879,9 @@ class UVMGenerator:
         # 准备上下文
         context = {
             "config": self.config,
-            "agents": self.config["agents"],
+            "agents": self.config.get("agents", []),
+            "agent_types": self.agent_def_map,
+            "agent_instances": self.agent_instances,
             "items": self.config.get("items", []),
             "interfaces": self.config.get("interfaces", []),
             "item_map": self.item_map,

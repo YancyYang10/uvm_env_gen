@@ -2,63 +2,79 @@
 
 module ${config['testbench']['name']};
     import uvm_pkg::*;
-    `include "uvm_macros.svh"  
+    `include "uvm_macros.svh"
 
-    % for intf in interfaces:
-    logic ${intf['clock']};
-    real  ${intf['clock']}_delay;
-    logic ${intf['reset']};
-    real  ${intf['reset']}_delay;
-    % endfor
+<%
+    # 收集唯一的 clock 和 reset 信号，避免重复声明
+    unique_clocks = {}
+    unique_resets = {}
+    for intf in interfaces:
+        clk = intf.get('clock', 'clk')
+        rst = intf.get('reset', 'rst_n')
+        clk_period = intf.get('clk_period', '10ns')
+        if clk not in unique_clocks:
+            unique_clocks[clk] = clk_period
+        if rst not in unique_resets:
+            unique_resets[rst] = True
+%>
+    // === Clock Signals (去重) ===
+% for clk, period in unique_clocks.items():
+    logic ${clk};
+    real  ${clk}_delay;
+% endfor
 
-    % for intf in interfaces:
+    // === Reset Signals (去重) ===
+% for rst in unique_resets.keys():
+    logic ${rst};
+    real  ${rst}_delay;
+% endfor
+
+    // === Clock Generation ===
+% for clk, period in unique_clocks.items():
     initial begin
-        ${intf['clock']} = 0;
-        ${intf['clock']}_delay = $urandom_range(0,100) / 100;
-        #(${intf['clock']}_delay * 1ns);
+        ${clk} = 0;
+        ${clk}_delay = $urandom_range(0,100) / 100;
+        #(${clk}_delay * 1ns);
         forever begin
-            #${intf['clk_period']};
-            ${intf['clock']} = ~${intf['clock']};
+            #${period};
+            ${clk} = ~${clk};
         end
     end
 
-    % endfor
+% endfor
 
-    % for intf in interfaces:
+    // === Reset Generation ===
+% for rst in unique_resets.keys():
     initial begin
-        //${intf['reset']} = 1;
-        //#10ns;
-        ${intf['reset']} = 0;
-        ${intf['reset']}_delay = $urandom_range(10,100);
-        #(${intf['reset']}_delay * 1ns);
-        ${intf['reset']} = 1;
+        ${rst} = 0;
+        ${rst}_delay = $urandom_range(10,100);
+        #(${rst}_delay * 1ns);
+        ${rst} = 1;
     end
-    % endfor
+% endfor
 
-    // Interfaces
-    % for interface in interfaces:
+    // === Interface Instantiation ===
+% for interface in interfaces:
     ${interface['name']} ${interface['name']}_vif(${interface['clock']}, ${interface['reset']});
-    % endfor
+% endfor
 
-    // DUT instantiation
-    % if rtl_ports:
+    // === DUT Instantiation ===
+% if rtl_ports:
     ${config['rtl']['top_module']} ${config['testbench']['dut_instance']} (
-    % for port in rtl_ports:
+% for port in rtl_ports:
         .${port['name']} ( ${"\t\t"} )${"," if not loop.last else ""} // ${port['direction']} ${port['width']}
-    % endfor
+% endfor
     );
-    % else:
+% else:
     ${config['rtl']['top_module']} ${config['testbench']['dut_instance']}();
-    % endif
+% endif
 
-
+    // === UVM Configuration ===
     initial begin
-      // Interface configuration
-      % for interface in interfaces:
+% for interface in interfaces:
         uvm_config_db#(virtual ${interface['name']})::set(null, "uvm_test_top.env*", "${interface['name']}_vif", ${interface['name']}_vif);
-      % endfor
-      
+% endfor
+
         run_test("${config['test']['base_name']}");
     end
 endmodule
-

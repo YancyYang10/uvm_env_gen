@@ -3,15 +3,16 @@
 
 class virtual_sequencer extends uvm_sequencer;
     `uvm_component_utils(virtual_sequencer)
-  
+
     ${config['cfg']['name']} cfg_m;
-    % for agent in config['agents']:
-    ${agent['name']}_sequencer ${agent['name']}_sqr;
+    // === Sequencer handles for each agent instance ===
+    % for inst in agent_instances:
+    ${inst['type']}_sequencer ${inst['name']}_sqr;
     % endfor
     % for interface in config['interfaces']:
     virtual ${interface['name']} ${interface['name']}_vif;
     % endfor
-  
+
     function new(string name, uvm_component parent);
         super.new(name, parent);
     endfunction

@@ -3,13 +3,14 @@
 
 class ${config['env']['name']} extends uvm_env;
     `uvm_component_utils(${config['env']['name']})
-  
+
     ${config['cfg']['name']} cfg_m;
 
-    % for agent in config['agents']:
-    ${agent['name']}_agent ${agent['name']}_agt;
+    // === Agent 实例声明 ===
+    % for inst in agent_instances:
+    ${inst['type']}_agent ${inst['name']}_agt;
     % endfor
-    
+
     % if config['env']['has_ref_model']:
     ${config['ref_model']['name']} ref_model;
     % endif
@@ -32,10 +33,11 @@ class ${config['env']['name']} extends uvm_env;
             `uvm_fatal("get_type_name()", "Top cfg not found!")
         end
 
-        % for agent in config['agents']:
-        ${agent['name']}_agt = ${agent['name']}_agent::type_id::create("${agent['name']}_agt", this);
+        // === Agent 实例化 ===
+        % for inst in agent_instances:
+        ${inst['name']}_agt = ${inst['type']}_agent::type_id::create("${inst['name']}_agt", this);
         % endfor
-        
+
         % if config['env']['has_ref_model']:
         ref_model = ${config['ref_model']['name']}::type_id::create("ref_model", this);
         % endif
@@ -45,29 +47,29 @@ class ${config['env']['name']} extends uvm_env;
         % if config['env']['has_coverage']:
         coverage = ${config['coverage']['name']}::type_id::create("coverage", this);
         % endif
-        
+
         v_sqr = virtual_sequencer::type_id::create("v_sqr", this);
     endfunction
 
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
-        % for agent in config['agents']:
-        if(cfg_m.${agent['name']}_agt_is_active == UVM_ACTIVE) begin
-            v_sqr.${agent['name']}_sqr = ${agent['name']}_agt.sequencer;
+        % for inst in agent_instances:
+        if(cfg_m.${inst['name']}_agt_is_active == UVM_ACTIVE) begin
+            v_sqr.${inst['name']}_sqr = ${inst['name']}_agt.sequencer;
         end
         % endfor
-        
+
         % if config['env']['has_ref_model']:
-        % for agent in config['agents']:
-        % if agent['type'] == "in":
-        ${agent['name']}_agt.monitor.ap.connect(ref_model.${agent['item']}_mon_imp);
+        % for inst in agent_instances:
+        % if inst.get('type_role') == "in":
+        ${inst['name']}_agt.monitor.ap.connect(ref_model.${inst['item']}_mon_imp);
         % endif
-        % if agent['type'] == "out":
-        ${agent['name']}_agt.monitor.ap.connect(scoreboard.${agent['item']}_act_imp);
+        % if inst.get('type_role') == "out":
+        ${inst['name']}_agt.monitor.ap.connect(scoreboard.${inst['item']}_act_imp);
         % endif
         % endfor
         % endif
-        
+
         % if config['env']['has_ref_model'] and config['env']['has_scoreboard']:
         % for pred_item in config['ref_model']['predicted_type']:
         ref_model.${pred_item}_pred_port.connect(scoreboard.${pred_item}_exp_imp);

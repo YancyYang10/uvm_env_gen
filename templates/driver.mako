@@ -42,9 +42,9 @@ class ${agent['name']}_driver extends uvm_driver #(${item_name});
 
     virtual task drive_transfer(${item_name} tr);
       // Custom drive logic here
-        @(posedge vif.${intf['clock']});
-      //  vif.addr <= tr.addr;
-      //  vif.data <= tr.data;
+        @(vif.drv_cb);
+      //  vif.drv_cb.addr <= tr.addr;
+      //  vif.drv_cb.data <= tr.data;
     endtask
 endclass
 

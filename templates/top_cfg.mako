@@ -3,11 +3,12 @@
 
 class ${config['cfg']['name']} extends uvm_object;
 
-    % for agent in config['agents']:
-    % if agent['mode'] == 'passive':
-    uvm_active_passive_enum ${agent['name']}_agt_is_active = UVM_PASSIVE;
+    // === Agent instance active/passive config ===
+    % for inst in agent_instances:
+    % if inst['mode'] == 'passive':
+    uvm_active_passive_enum ${inst['name']}_agt_is_active = UVM_PASSIVE;
     % else:
-    uvm_active_passive_enum ${agent['name']}_agt_is_active = UVM_ACTIVE;
+    uvm_active_passive_enum ${inst['name']}_agt_is_active = UVM_ACTIVE;
     % endif
     % endfor
 

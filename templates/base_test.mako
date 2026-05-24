@@ -21,20 +21,40 @@ class ${config['test']['base_name']} extends uvm_test;
         `uvm_info(get_type_name(), "build_phase done", UVM_LOW);
     endfunction
 
-    task main_phase(uvm_phase phase);
-    % for agent in config['agents']:
-        ${agent['name']}_sequence ${agent['name']}_seq;
+    virtual task main_phase(uvm_phase phase);
+    % for inst in agent_instances:
+        ${inst['type']}_sequence ${inst['name']}_seq;
     % endfor
         phase.raise_objection(this);
         `uvm_info(get_type_name(), "main_phase start", UVM_LOW);
-    % for agent in config['agents']:
-        ${agent['name']}_seq = ${agent['name']}_sequence::type_id::create("${agent['name']}_seq");
-//        ${agent['name']}_seq.start(env_m.v_sqr);
+    % for inst in agent_instances:
+        ${inst['name']}_seq = ${inst['type']}_sequence::type_id::create("${inst['name']}_seq");
+//        ${inst['name']}_seq.start(env_m.v_sqr);
     % endfor
         phase.phase_done.set_drain_time(this,5us);
         phase.drop_objection(this);
         `uvm_info(get_type_name(), "main_phase done", UVM_LOW);
     endtask
+
+    function void report_phase(uvm_phase phase);
+	int num_uvm_errors;
+	uvm_report_server server;
+
+        super.report_phase(phase);
+	if(server==null) server = get_report_server();
+    	num_uvm_errors = server.get_severity_count(UVM_ERROR)+server.get_severity_count(UVM_FATAL);
+        if(num_uvm_errors==0)begin
+            `uvm_info(get_type_name(),"================",UVM_NONE)
+            `uvm_info(get_type_name(),"=TEST_CASE_PASS=",UVM_NONE)
+            `uvm_info(get_type_name(),"================\n",UVM_NONE)
+    	end
+    	else begin
+            `uvm_info(get_type_name(),"\n================",UVM_NONE)
+            `uvm_info(get_type_name(),"=TEST_CASE_FAIL=",UVM_NONE)
+            `uvm_info(get_type_name(),"================\n",UVM_NONE)
+    	end
+    endfunction
+
 endclass
 
 `endif

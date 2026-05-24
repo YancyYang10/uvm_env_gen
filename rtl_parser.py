@@ -13,13 +13,35 @@ class RTLParser:
         self.logger.info(f"RTL_TOP_MODULE: {self.top_module}")
 
     def _find_module(self, content):
-        """find top_module"""
-        pattern = r"module\s+(" + re.escape(self.top_module) + r")\s*"
+        """find top_module, supports parameterized module declaration"""
+        # 支持: module name (...) 或 module name #(...) (...)
+        # 正则匹配到端口列表开始的 '(' 位置
+        pattern = r"module\s+" + re.escape(self.top_module) + r"\s*(?:#\s*\([^)]*\))?\s*\("
         match = re.search(pattern, content)
         if not match:
             print(f"⚠️  Error! Not found {self.top_module} in {self.file_path}")
             return None
-        return match.start()
+        # 返回端口列表 '(' 的位置 (match.end() - 1)
+        return match.end() - 1
+
+    def _extract_port_list(self, content, start_pos):
+        """从模块开始位置提取端口列表，使用配对括号匹配"""
+        # 1. 找到第一个 '(' 的位置（端口列表开始）
+        paren_start = content.find('(', start_pos)
+        if paren_start == -1:
+            return ""
+
+        # 2. 配对匹配找到对应的 ')'
+        depth = 1
+        pos = paren_start + 1
+        while pos < len(content) and depth > 0:
+            if content[pos] == '(':
+                depth += 1
+            elif content[pos] == ')':
+                depth -= 1
+            pos += 1
+
+        return content[paren_start + 1:pos - 1]
 
     def parse(self):
         """解析RTL文件获取端口信息"""
@@ -33,19 +55,17 @@ class RTLParser:
             if module_pos is None:
                 raise ValueError(f"Module {self.top_module} not found")
 
-            module_body = content[module_pos:]
-            module_match = re.search(r"module.*?\((.*?)\);", module_body, re.DOTALL)
-            if not module_match:
+            # 使用配对括号匹配提取端口列表
+            ports_str = self._extract_port_list(content, module_pos)
+            if not ports_str:
                 raise ValueError(f"Failed to parse ports for {self.top_module}")
-
-            ports_str = module_match.group(1)
             # 移除注释
             ports_str = re.sub(r'/\*.*?\*/', '', ports_str, flags=re.DOTALL)
             ports_str = re.sub(r'//.*?$', '', ports_str, flags=re.MULTILINE)
             ports_str = ports_str.strip()
 
-            # 端口模式匹配，支持更复杂的端口声明
-            port_pattern = r'(input|output|inout)\s*(reg|wire|logic)?\s*(signed)?\s*(\[.*?\])?\s*(\w+)'
+            # 端口模式匹配，支持参数表达式如 [DATA_WIDTH-1:0]
+            port_pattern = r'(input|output|inout)\s*(reg|wire|logic)?\s*(signed)?\s*(\[[^\]]+\])?\s*(\w+)'
 
             self.ports = []
             port_matches = list(re.finditer(port_pattern, ports_str))

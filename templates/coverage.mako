@@ -12,6 +12,30 @@ class ${config['coverage']['name']} extends uvm_component;
     covergroup ${group['name']}_cg;
       % for cp in group['coverpoints']:
         ${cp['name']}: coverpoint ${group['interface'][0]}_vif.${cp['expr']} {
+          % if cp.get('bins'):
+            // === bins 定义 ===
+            % for bin in cp['bins']:
+            bins ${bin['name']} = ${bin['values']};
+            % endfor
+          % endif
+          % if cp.get('ignore_bins'):
+            // === ignore_bins ===
+            % for ib in cp['ignore_bins']:
+            ignore_bins ${ib['name']} = ${ib['values']};
+            % endfor
+          % endif
+          % if cp.get('illegal_bins'):
+            // === illegal_bins ===
+            % for ib in cp['illegal_bins']:
+            illegal_bins ${ib['name']} = ${ib['values']};
+            % endfor
+          % endif
+          % if cp.get('transition_bins'):
+            // === transition bins ===
+            % for tb in cp['transition_bins']:
+            bins ${tb['name']} = ${tb['trans']};
+            % endfor
+          % endif
         }
       % endfor
       % if group.get('crosses'):
@@ -50,8 +74,8 @@ class ${config['coverage']['name']} extends uvm_component;
     % for group in config['coverage']['groups']:
     task do_sample_${group['name']}_cg();
         forever begin
-            @(posedge ${group['interface'][0]}_vif.${group['interface'][1]});
-            if(${group['interface'][0]}_vif.${group['interface'][2]}) begin
+            @(${group['interface'][0]}_vif.mon_cb);
+            if(${group['interface'][0]}_vif.mon_cb.${group['interface'][2]}) begin
                 ${group['name']}_cg.sample();
             end
         end

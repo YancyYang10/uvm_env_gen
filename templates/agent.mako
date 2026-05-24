@@ -3,7 +3,7 @@
 
 class ${agent['name']}_agent extends uvm_agent;
     `uvm_component_utils(${agent['name']}_agent)
-    
+
     ${config['cfg']['name']} cfg_m;
 
     virtual ${agent['interface']} vif;
@@ -11,6 +11,9 @@ class ${agent['name']}_agent extends uvm_agent;
     ${agent['name']}_driver     driver;
     ${agent['name']}_sequencer  sequencer;
     ${agent['name']}_monitor    monitor;
+
+    // 动态获取实例名对应的配置字段
+    protected uvm_active_passive_enum is_active;
 
 
     function new(string name, uvm_component parent);
@@ -28,20 +31,31 @@ class ${agent['name']}_agent extends uvm_agent;
             `uvm_fatal(get_type_name(), "Top cfg not found!")
         end
 
-        if(cfg_m.${agent['name']}_agt_is_active == UVM_ACTIVE) begin
+        // 根据实例名获取对应的 is_active 配置
+        // 实例名格式: xxx_agt，对应配置字段: xxx_agt_is_active
+        case(get_name())
+        % for inst in agent_instances:
+        % if inst['type'] == agent['name']:
+            "${inst['name']}_agt": is_active = cfg_m.${inst['name']}_agt_is_active;
+        % endif
+        % endfor
+            default: is_active = UVM_PASSIVE;  // 默认 passive
+        endcase
+
+        if(is_active == UVM_ACTIVE) begin
             driver = ${agent['name']}_driver::type_id::create("driver", this);
             sequencer = ${agent['name']}_sequencer::type_id::create("sequencer", this);
         end
 
         monitor = ${agent['name']}_monitor::type_id::create("monitor", this);
-    
+
         `uvm_info(get_type_name(),"build_phase done",UVM_LOW);
     endfunction
 
     function void connect_phase(uvm_phase phase);
         `uvm_info(get_type_name(),"connect_phase start",UVM_LOW);
-        
-        if(cfg_m.${agent['name']}_agt_is_active == UVM_ACTIVE) begin
+
+        if(is_active == UVM_ACTIVE) begin
             driver.seq_item_port.connect(sequencer.seq_item_export);
         end
 

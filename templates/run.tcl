@@ -1,13 +1,14 @@
 set wave $env(wave)
 set tc $env(tc)
 set seed $env(seed)
+set RESULT_DIR $env(RESULT_DIR)
 
 if {$env(wave)} {
 
-    fsdbDumpfile "./out/sim_${tc}_${seed}.fsdb"
-    # "+mda"   - 包含多维数组（Memory/Array）
-    # "+struct" - 包含结构体（可选，按需添加）
-    fsdbDumpvars 0 tb_top "+mda+struct"
+    fsdbDumpfile "./${RESULT_DIR}/sim_${tc}_${seed}.fsdb"
+    # "+mda"   - Include multi-dimensional arrays (Memory/Array)
+    # "+struct" - Include structs (optional)
+    fsdbDumpvars 0 tb_top +mda +struct
 }
-run 1ms
-stop
+run 10ms
+quit

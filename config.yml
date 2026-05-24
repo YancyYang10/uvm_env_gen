@@ -1,13 +1,12 @@
-output_dir: /home/IC_verify/script/uvm_gen_v1.1/demo
+# UVM Generator v1.2 配置文件
+# 基于 rtl/ahb2apb.v 自动生成 UVM 验证环境
 
+output_dir: /home/IC_verify/script/uvm_gen_v1.2/demo
 
 rtl:
-  top_file: "/home/IC_verify/project/axi2apb/axi2apb.v"
-  top_module: "axi_to_apb_bridge "
-  flist: "/home/IC_verify/project/axi2apb/rtl.f"
-#  top_file: "/home/IC_verify/script/uvm_gen/rtl/ahb2apb.v"
-#  top_module: "ahb2apb"
-#  flist: "/home/IC_verify/script/uvm_gen/rtl/rtl.f"
+  top_file: "/home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v"
+  top_module: "ahb2apb"
+  flist: "/home/IC_verify/script/uvm_gen_v1.2/rtl/rtl.f"
 
 testbench:
   name: tb_top
@@ -19,7 +18,7 @@ test:
   sanity_name: tc_sanity
 
 env:
-  name: chip_env
+  name: ahb2apb_env
   has_coverage: true
   has_scoreboard: true
   has_ref_model: true
@@ -27,104 +26,141 @@ env:
 cfg:
   name: top_cfg
   fields:
-    - { name: work_mode, type: "logic[31:0]", rand: true }
+    - { name: is_active, type: int, rand: false }
     - { name: scb_en, type: int, rand: false }
 
-
+# ============================================================
+# Agents: AHB Master (active) + APB Monitor (passive)
+# ============================================================
 agents:
-  - name: ahb_master_0
-    mode: active            #enum[active, passive]
-    type: in                #enum[in, out]
-    interface: ahb_if       #inside[interfaces]
-    item: ahb_item          #inside[items]
+  - name: ahb_master
+    mode: active
+    type: in
+    interface: ahb_if
+    item: ahb_item
 
-  - name: apb_slave_0
+  - name: apb_monitor
     mode: passive
     type: out
     interface: apb_if
     item: apb_item
 
-  - name: ahb_master_1
-    mode: active
-    type: out
-    interface: ahb_if
-    item: ahb_item
-
-  - name: apb_slave_1
-    mode: active
-    type: in
-    interface: apb_if
-    item: apb_item
-
+# ============================================================
+# Transaction Items
+# ============================================================
 items:
   - name: ahb_item
     fields:
       - { name: addr, type: "logic[31:0]", rand: true }
-      - { name: data, type: "logic[63:0]", rand: true }
-      - { name: burst_type, type: int, rand: true }
+      - { name: data, type: "logic[31:0]", rand: true }
+      - { name: trans, type: "logic[1:0]", rand: true }
+      - { name: write, type: logic, rand: true }
+    constraints:
+      - { name: trans_c, expr: "trans inside {[0:3]}" }
 
   - name: apb_item
     fields:
-      - { name: paddr, type: "logic[15:0]", rand: false }
-      - { name: pdata, type: "logic[ 7:0]", rand: false }
+      - { name: paddr, type: "logic[31:0]", rand: false }
+      - { name: pwdata, type: "logic[31:0]", rand: false }
+      - { name: prdata, type: "logic[31:0]", rand: false }
+      - { name: pwrite, type: logic, rand: false }
+      - { name: psel, type: "logic[8:0]", rand: false }
 
+# ============================================================
+# Interfaces (基于 ahb2apb.v 端口定义)
+# ============================================================
 interfaces:
   - name: ahb_if
-    clock: aclk
+    clock: hclk
     clk_period: 10ns
-    reset: hrst_n
+    reset: hreset_n
     signals:
+      # AHB Master 输入信号 (TB 驱动)
+      - { name: hsel, type: logic, dir: output }
       - { name: haddr, type: "logic[31:0]", dir: output }
-      - { name: hsel, type: "logic", dir: output }
-      - { name: hburst, type: "logic[1:0]", dir: output }
-      - { name: hwdata, type: "logic[63:0]", dir: output }
-      - { name: hrdata, type: "logic[63:0]", dir: input }
+      - { name: htrans, type: "logic[1:0]", dir: output }
+      - { name: hwdata, type: "logic[31:0]", dir: output }
+      - { name: hwrite, type: logic, dir: output }
+      # AHB Master 输出信号 (TB 采样)
+      - { name: hrdata, type: "logic[31:0]", dir: input }
+      - { name: hready, type: logic, dir: input }
+      - { name: hresp, type: "logic[1:0]", dir: input }
 
   - name: apb_if
-    clock: pclk
-    clk_period: 30ns
-    reset: preset_n
+    clock: hclk          # APB 与 AHB 共用时钟
+    clk_period: 10ns
+    reset: hreset_n
     signals:
-      - { name: psel, type: logic, dir: output }
-      - { name: penable, type: logic, dir: output }
-      - { name: pwrite, type: logic, dir: output }
-      - { name: paddr, type: logic, dir: output }
-      - { name: prdata, type: "logic[31:0]", dir: input }
-      - { name: pwdata, type: "logic[31:0]", dir: output }
+      # APB 输出信号 (DUT -> TB monitor)
+      - { name: paddr, type: "logic[31:0]", dir: input }
+      - { name: penable, type: logic, dir: input }
+      - { name: pwrite, type: logic, dir: input }
+      - { name: pwdata, type: "logic[31:0]", dir: input }
+      - { name: psel, type: "logic[8:0]", dir: input }
+      # APB 输入信号 (TB 驱动 slave 响应)
+      - { name: pready, type: "logic[8:0]", dir: output }
+      - { name: prdata, type: "logic[31:0]", dir: output }
 
+# ============================================================
+# Reference Model
+# ============================================================
 ref_model:
-  name: chip_ref_model
-  input_item: [ahb_item, apb_item]
-  predicted_type: [apb_item, ahb_item]
+  name: ahb2apb_ref_model
+  input_item: [ahb_item]
+  predicted_type: [apb_item]
 
+# ============================================================
+# Scoreboard
+# ============================================================
 scoreboard:
-  name: chip_scoreboard
-  actual_type: [apb_item, ahb_item]
-  expected_type: [apb_item, ahb_item]
+  name: ahb2apb_scoreboard
+  actual_type: [apb_item]
+  expected_type: [apb_item]
   compare_method: "byte_compare"
   error_tolerance: 0
 
+# ============================================================
+# Coverage
+# ============================================================
 coverage:
-  name: chip_coverage
+  name: ahb2apb_coverage
   groups:
     - name: ahb_cov
-      interface: [ahb_if, aclk, hrst_n] #[interface_name, sample_clk_name, rst_name]
+      interface: [ahb_if, hclk, hreset_n]
       coverpoints:
         - name: addr_cp
           expr: "haddr"
-          
-        - name: burst_cp
-          expr: "hburst"
-          
+          bins:
+            - { name: low, values: "{[0:'h0FFF]}" }
+            - { name: mid, values: "{['h1000:'hFFFF]}" }
+            - { name: high, values: "{['h10000:$]}" }
+        - name: trans_cp
+          expr: "htrans"
+          bins:
+            - { name: idle, values: "{0}" }
+            - { name: busy, values: "{1}" }
+            - { name: nonseq, values: "{2}" }
+            - { name: seq, values: "{3}" }
+        - name: write_cp
+          expr: "hwrite"
+          bins:
+            - { name: read, values: "{0}" }
+            - { name: write, values: "{1}" }
       crosses:
-        - name: addr_x_burst
-          points: [addr_cp, burst_cp]
-          
+        - name: addr_x_write
+          points: [addr_cp, write_cp]
+
     - name: apb_cov
-      interface: [apb_if, pclk, preset_n] #[interface_name, sample_clk_name, rst_name]
+      interface: [apb_if, hclk, hreset_n]
       coverpoints:
-        - name: psel_cp
-          expr: "psel"
-          
         - name: paddr_cp
           expr: "paddr"
+          bins:
+            - { name: low, values: "{[0:'h0FFF]}" }
+            - { name: high, values: "{['h1000:$]}" }
+        - name: psel_cp
+          expr: "psel"
+          bins:
+            - { name: slave0, values: "{9'b000000001}" }
+            - { name: slave1, values: "{9'b000000010}" }
+            - { name: others, values: "default" }

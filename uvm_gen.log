@@ -319,3 +319,543 @@
 2026-03-15 13:36:32,879 - __main__ - INFO - Copied file list: rtl.f
 2026-03-15 13:36:32,879 - __main__ - INFO - Generated tb.f
 2026-03-15 13:36:32,883 - __main__ - INFO - UVM environment generation completed successfully!
+2026-03-19 06:34:11,968 - __main__ - INFO - Loading configuration from: config.yml
+2026-03-19 06:34:11,976 - __main__ - DEBUG - Validating required configuration sections
+2026-03-19 06:34:11,976 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 06:34:11,976 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 06:34:11,976 - __main__ - INFO - Parsed 2 agent types, 4 instances
+2026-03-19 06:34:11,976 - __main__ - INFO - Validating configuration content
+2026-03-19 06:34:11,977 - __main__ - WARNING - File not found: /home/IC_verify/project/axi2apb/axi2apb.v
+2026-03-19 06:34:11,977 - __main__ - WARNING - File not found: /home/IC_verify/project/axi2apb/rtl.f
+2026-03-19 06:34:11,977 - __main__ - INFO - Configuration validation passed
+2026-03-19 06:34:11,977 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.1/templates
+2026-03-19 06:34:11,977 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.1/demo
+2026-03-19 06:34:11,977 - __main__ - DEBUG - Template directory: /home/IC_verify/script/uvm_gen_v1.1/templates
+2026-03-19 06:34:11,977 - __main__ - DEBUG - Example interface clock: pclk
+2026-03-19 06:34:11,977 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 06:34:11,977 - __main__ - INFO - Existing output directory found. Creating backup: /home/IC_verify/script/uvm_gen_v1.1/demo_backup_axi_to_apb_bridge 
+2026-03-19 06:34:12,105 - __main__ - INFO - Backup created successfully: /home/IC_verify/script/uvm_gen_v1.1/demo_backup_axi_to_apb_bridge 
+2026-03-19 06:34:12,106 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.1/demo
+2026-03-19 06:34:12,106 - __main__ - INFO - Generating data components...
+2026-03-19 06:34:12,106 - __main__ - INFO - Generating data components...
+2026-03-19 06:34:12,106 - __main__ - INFO - Generating interfaces...
+2026-03-19 06:34:12,106 - __main__ - DEBUG - Generating interface: ahb_if
+2026-03-19 06:34:12,107 - __main__ - DEBUG - Rendering template: interface.mako
+2026-03-19 06:34:12,107 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/interface.mako
+2026-03-19 06:34:12,111 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 06:34:12,111 - __main__ - DEBUG - Generating interface: apb_if
+2026-03-19 06:34:12,111 - __main__ - DEBUG - Rendering template: interface.mako
+2026-03-19 06:34:12,111 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/interface.mako
+2026-03-19 06:34:12,113 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 06:34:12,113 - __main__ - INFO - Generating transaction items...
+2026-03-19 06:34:12,113 - __main__ - DEBUG - Generating item: ahb_item
+2026-03-19 06:34:12,113 - __main__ - DEBUG - Rendering template: item.mako
+2026-03-19 06:34:12,113 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/item.mako
+2026-03-19 06:34:12,116 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 06:34:12,116 - __main__ - DEBUG - Generating item: apb_item
+2026-03-19 06:34:12,116 - __main__ - DEBUG - Rendering template: item.mako
+2026-03-19 06:34:12,116 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/item.mako
+2026-03-19 06:34:12,118 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 06:34:12,118 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 06:34:12,118 - __main__ - INFO - Generating agents...
+2026-03-19 06:34:12,118 - __main__ - INFO - Generating agents...
+2026-03-19 06:34:12,118 - __main__ - DEBUG - Generating agent type: ahb_agent
+2026-03-19 06:34:12,119 - __main__ - DEBUG - Rendering template: driver.mako
+2026-03-19 06:34:12,119 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/driver.mako
+2026-03-19 06:34:12,121 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_driver.sv
+2026-03-19 06:34:12,121 - __main__ - DEBUG - Rendering template: monitor.mako
+2026-03-19 06:34:12,121 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/monitor.mako
+2026-03-19 06:34:12,123 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_monitor.sv
+2026-03-19 06:34:12,124 - __main__ - DEBUG - Rendering template: sequencer.mako
+2026-03-19 06:34:12,124 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/sequencer.mako
+2026-03-19 06:34:12,125 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_sequencer.sv
+2026-03-19 06:34:12,125 - __main__ - DEBUG - Rendering template: agent.mako
+2026-03-19 06:34:12,125 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/agent.mako
+2026-03-19 06:34:12,127 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_agent.sv
+2026-03-19 06:34:12,128 - __main__ - DEBUG - Rendering template: sequence.mako
+2026-03-19 06:34:12,128 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/sequence.mako
+2026-03-19 06:34:12,129 - __main__ - INFO - Generated: uvm_tc/seq/ahb_agent_sequence.sv
+2026-03-19 06:34:12,129 - __main__ - INFO - Successfully generated agent type: ahb_agent
+2026-03-19 06:34:12,129 - __main__ - DEBUG - Generating agent type: apb_agent
+2026-03-19 06:34:12,130 - __main__ - DEBUG - Rendering template: driver.mako
+2026-03-19 06:34:12,130 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/driver.mako
+2026-03-19 06:34:12,131 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_driver.sv
+2026-03-19 06:34:12,132 - __main__ - DEBUG - Rendering template: monitor.mako
+2026-03-19 06:34:12,132 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/monitor.mako
+2026-03-19 06:34:12,133 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_monitor.sv
+2026-03-19 06:34:12,134 - __main__ - DEBUG - Rendering template: sequencer.mako
+2026-03-19 06:34:12,134 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/sequencer.mako
+2026-03-19 06:34:12,134 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_sequencer.sv
+2026-03-19 06:34:12,135 - __main__ - DEBUG - Rendering template: agent.mako
+2026-03-19 06:34:12,135 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/agent.mako
+2026-03-19 06:34:12,136 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_agent.sv
+2026-03-19 06:34:12,137 - __main__ - DEBUG - Rendering template: sequence.mako
+2026-03-19 06:34:12,137 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/sequence.mako
+2026-03-19 06:34:12,138 - __main__ - INFO - Generated: uvm_tc/seq/apb_agent_sequence.sv
+2026-03-19 06:34:12,138 - __main__ - INFO - Successfully generated agent type: apb_agent
+2026-03-19 06:34:12,138 - __main__ - INFO - Generating common components...
+2026-03-19 06:34:12,138 - __main__ - INFO - Generating common components...
+2026-03-19 06:34:12,138 - __main__ - DEBUG - Rendering template: top_cfg.mako
+2026-03-19 06:34:12,138 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/top_cfg.mako
+2026-03-19 06:34:12,141 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 06:34:12,141 - __main__ - DEBUG - Rendering template: virtual_sequencer.mako
+2026-03-19 06:34:12,141 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/virtual_sequencer.mako
+2026-03-19 06:34:12,143 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 06:34:12,143 - __main__ - DEBUG - Rendering template: ref_model.mako
+2026-03-19 06:34:12,143 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/ref_model.mako
+2026-03-19 06:34:12,147 - __main__ - INFO - Generated: uvm_tb/chip_ref_model.sv
+2026-03-19 06:34:12,147 - __main__ - DEBUG - Rendering template: scoreboard.mako
+2026-03-19 06:34:12,147 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/scoreboard.mako
+2026-03-19 06:34:12,151 - __main__ - INFO - Generated: uvm_tb/chip_scoreboard.sv
+2026-03-19 06:34:12,152 - __main__ - DEBUG - Rendering template: coverage.mako
+2026-03-19 06:34:12,152 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/coverage.mako
+2026-03-19 06:34:12,156 - __main__ - INFO - Generated: uvm_tb/chip_coverage.sv
+2026-03-19 06:34:12,156 - __main__ - DEBUG - Rendering template: env.mako
+2026-03-19 06:34:12,156 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/env.mako
+2026-03-19 06:34:12,160 - __main__ - INFO - Generated: uvm_tb/chip_env.sv
+2026-03-19 06:34:12,160 - __main__ - DEBUG - Rendering template: base_test.mako
+2026-03-19 06:34:12,160 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/base_test.mako
+2026-03-19 06:34:12,162 - __main__ - INFO - Generated: uvm_tc/tc_base_test.sv
+2026-03-19 06:34:12,163 - __main__ - DEBUG - Rendering template: sanity_test.mako
+2026-03-19 06:34:12,163 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/sanity_test.mako
+2026-03-19 06:34:12,164 - __main__ - INFO - Generated: uvm_tc/tc_sanity.sv
+2026-03-19 06:34:12,164 - __main__ - INFO - Generating testbench...
+2026-03-19 06:34:12,164 - __main__ - INFO - Generating testbench...
+2026-03-19 06:34:12,164 - __main__ - INFO - Parsing RTL ports...
+2026-03-19 06:34:12,164 - rtl_parser - INFO - RTL_FILE_PATH:  /home/IC_verify/project/axi2apb/axi2apb.v
+2026-03-19 06:34:12,164 - rtl_parser - INFO - RTL_TOP_MODULE: axi_to_apb_bridge 
+2026-03-19 06:34:12,164 - rtl_parser - INFO - Parsing RTL file...
+2026-03-19 06:34:12,165 - rtl_parser - ERROR - RTL file not found: /home/IC_verify/project/axi2apb/axi2apb.v
+2026-03-19 06:34:12,165 - __main__ - WARNING - RTL parse warning: [Errno 2] No such file or directory: '/home/IC_verify/project/axi2apb/axi2apb.v'
+2026-03-19 06:34:12,165 - __main__ - WARNING - DUT ports may be incorrect
+2026-03-19 06:34:12,165 - __main__ - DEBUG - Rendering template: testbench.mako
+2026-03-19 06:34:12,165 - __main__ - DEBUG - Template path: /home/IC_verify/script/uvm_gen_v1.1/templates/testbench.mako
+2026-03-19 06:34:12,168 - __main__ - INFO - Generated: bench/tb_top.sv
+2026-03-19 06:34:12,168 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 06:34:12,168 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 06:34:12,169 - __main__ - DEBUG - Copied: Makefile
+2026-03-19 06:34:12,169 - __main__ - DEBUG - Copied: run.tcl
+2026-03-19 06:34:12,170 - __main__ - DEBUG - Copied: cm.cfg
+2026-03-19 06:34:12,170 - __main__ - ERROR - Error copying template files: File list not found: /home/IC_verify/project/axi2apb/rtl.f
+2026-03-19 06:34:12,170 - __main__ - ERROR - Generation failed: File list not found: /home/IC_verify/project/axi2apb/rtl.f
+2026-03-19 06:34:12,170 - __main__ - WARNING - Performing rollback...
+2026-03-19 06:34:12,170 - root - ERROR - Fatal error: File list not found: /home/IC_verify/project/axi2apb/rtl.f
+2026-03-19 06:35:18,065 - __main__ - INFO - Loading configuration from: test_config.yml
+2026-03-19 06:35:18,070 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 06:35:18,070 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 06:35:18,070 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 06:35:18,070 - __main__ - INFO - Validating configuration content
+2026-03-19 06:35:18,070 - __main__ - INFO - Configuration validation passed
+2026-03-19 06:35:18,070 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.2/templates
+2026-03-19 06:35:18,070 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/test_output
+2026-03-19 06:35:18,070 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 06:35:18,070 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.2/test_output
+2026-03-19 06:35:18,070 - __main__ - INFO - Generating data components...
+2026-03-19 06:35:18,070 - __main__ - INFO - Generating data components...
+2026-03-19 06:35:18,070 - __main__ - INFO - Generating interfaces...
+2026-03-19 06:35:18,074 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 06:35:18,076 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 06:35:18,076 - __main__ - INFO - Generating transaction items...
+2026-03-19 06:35:18,080 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 06:35:18,084 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 06:35:18,084 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 06:35:18,084 - __main__ - INFO - Generating agents...
+2026-03-19 06:35:18,084 - __main__ - INFO - Generating agents...
+2026-03-19 06:35:18,086 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_driver.sv
+2026-03-19 06:35:18,087 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_monitor.sv
+2026-03-19 06:35:18,089 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_sequencer.sv
+2026-03-19 06:35:18,091 - __main__ - INFO - Generated: uvm_tb/ahb_agent_agent/ahb_agent_agent.sv
+2026-03-19 06:35:18,093 - __main__ - INFO - Generated: uvm_tc/seq/ahb_agent_sequence.sv
+2026-03-19 06:35:18,093 - __main__ - INFO - Successfully generated agent type: ahb_agent
+2026-03-19 06:35:18,095 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_driver.sv
+2026-03-19 06:35:18,096 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_monitor.sv
+2026-03-19 06:35:18,097 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_sequencer.sv
+2026-03-19 06:35:18,099 - __main__ - INFO - Generated: uvm_tb/apb_agent_agent/apb_agent_agent.sv
+2026-03-19 06:35:18,101 - __main__ - INFO - Generated: uvm_tc/seq/apb_agent_sequence.sv
+2026-03-19 06:35:18,101 - __main__ - INFO - Successfully generated agent type: apb_agent
+2026-03-19 06:35:18,101 - __main__ - INFO - Generating common components...
+2026-03-19 06:35:18,101 - __main__ - INFO - Generating common components...
+2026-03-19 06:35:18,103 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 06:35:18,105 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 06:35:18,108 - __main__ - INFO - Generated: uvm_tb/chip_ref_model.sv
+2026-03-19 06:35:18,112 - __main__ - ERROR - Failed to generate scoreboard.mako: Error rendering template scoreboard.mako: 'compare_method'
+2026-03-19 06:35:18,112 - __main__ - ERROR - Generation failed: Error rendering template scoreboard.mako: 'compare_method'
+2026-03-19 06:35:18,112 - __main__ - WARNING - Performing rollback...
+2026-03-19 06:35:18,113 - root - ERROR - Fatal error: Error rendering template scoreboard.mako: 'compare_method'
+2026-03-19 07:31:07,473 - __main__ - INFO - Loading configuration from: config.yml
+2026-03-19 07:31:07,485 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 07:31:07,486 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 07:31:07,486 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 07:31:07,486 - __main__ - INFO - Validating configuration content
+2026-03-19 07:31:07,486 - __main__ - INFO - Configuration validation passed
+2026-03-19 07:31:07,486 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.1/templates
+2026-03-19 07:31:07,486 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 07:31:07,486 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 07:31:07,486 - __main__ - INFO - Existing output directory found. Creating backup: /home/IC_verify/script/uvm_gen_v1.2/demo_backup_ahb2apb
+2026-03-19 07:31:07,539 - __main__ - INFO - Backup created successfully: /home/IC_verify/script/uvm_gen_v1.2/demo_backup_ahb2apb
+2026-03-19 07:31:07,539 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 07:31:07,539 - __main__ - INFO - Generating data components...
+2026-03-19 07:31:07,539 - __main__ - INFO - Generating data components...
+2026-03-19 07:31:07,539 - __main__ - INFO - Generating interfaces...
+2026-03-19 07:31:07,543 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 07:31:07,546 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 07:31:07,546 - __main__ - INFO - Generating transaction items...
+2026-03-19 07:31:07,548 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 07:31:07,551 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 07:31:07,551 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 07:31:07,551 - __main__ - INFO - Generating agents...
+2026-03-19 07:31:07,551 - __main__ - INFO - Generating agents...
+2026-03-19 07:31:07,553 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_driver.sv
+2026-03-19 07:31:07,556 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_monitor.sv
+2026-03-19 07:31:07,557 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_sequencer.sv
+2026-03-19 07:31:07,560 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_agent.sv
+2026-03-19 07:31:07,562 - __main__ - INFO - Generated: uvm_tc/seq/ahb_sequence.sv
+2026-03-19 07:31:07,562 - __main__ - INFO - Successfully generated agent type: ahb
+2026-03-19 07:31:07,564 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_driver.sv
+2026-03-19 07:31:07,566 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_monitor.sv
+2026-03-19 07:31:07,567 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_sequencer.sv
+2026-03-19 07:31:07,569 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_agent.sv
+2026-03-19 07:31:07,570 - __main__ - INFO - Generated: uvm_tc/seq/apb_sequence.sv
+2026-03-19 07:31:07,570 - __main__ - INFO - Successfully generated agent type: apb
+2026-03-19 07:31:07,570 - __main__ - INFO - Generating common components...
+2026-03-19 07:31:07,570 - __main__ - INFO - Generating common components...
+2026-03-19 07:31:07,573 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 07:31:07,575 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 07:31:07,579 - __main__ - INFO - Generated: uvm_tb/ahb2apb_ref_model.sv
+2026-03-19 07:31:07,584 - __main__ - INFO - Generated: uvm_tb/ahb2apb_scoreboard.sv
+2026-03-19 07:31:07,587 - __main__ - INFO - Generated: uvm_tb/ahb2apb_coverage.sv
+2026-03-19 07:31:07,591 - __main__ - INFO - Generated: uvm_tb/ahb2apb_env.sv
+2026-03-19 07:31:07,594 - __main__ - INFO - Generated: uvm_tc/tc_base_test.sv
+2026-03-19 07:31:07,596 - __main__ - INFO - Generated: uvm_tc/tc_sanity.sv
+2026-03-19 07:31:07,596 - __main__ - INFO - Generating testbench...
+2026-03-19 07:31:07,596 - __main__ - INFO - Generating testbench...
+2026-03-19 07:31:07,596 - __main__ - INFO - Parsing RTL ports...
+2026-03-19 07:31:07,596 - rtl_parser - INFO - RTL_FILE_PATH:  /home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v
+2026-03-19 07:31:07,596 - rtl_parser - INFO - RTL_TOP_MODULE: ahb2apb
+2026-03-19 07:31:07,596 - rtl_parser - INFO - Parsing RTL file...
+2026-03-19 07:31:07,596 - rtl_parser - INFO - Parsed 41 ports from RTL
+2026-03-19 07:31:07,596 - __main__ - INFO - Parsed 41 ports from RTL
+2026-03-19 07:31:07,600 - __main__ - INFO - Generated: bench/tb_top.sv
+2026-03-19 07:31:07,600 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 07:31:07,600 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 07:31:07,602 - __main__ - INFO - Copied file list: rtl.f
+2026-03-19 07:31:07,602 - __main__ - INFO - Generated tb.f
+2026-03-19 07:31:07,604 - __main__ - INFO - UVM environment generation completed successfully!
+2026-03-19 07:33:10,626 - uvm_gen - INFO - Loading configuration from: {'output_dir': '/home/IC_verify/script/uvm_gen_v1.2/demo', 'rtl': {'top_file': '/home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v', 'top_module': 'ahb2apb', 'flist': '/home/IC_verify/script/uvm_gen_v1.2/rtl/rtl.f'}, 'testbench': {'name': 'tb_top', 'timescale': '1ns/1ps', 'dut_instance': 'DUT'}, 'test': {'base_name': 'tc_base_test', 'sanity_name': 'tc_sanity'}, 'env': {'name': 'ahb2apb_env', 'has_coverage': True, 'has_scoreboard': True, 'has_ref_model': True}, 'cfg': {'name': 'top_cfg', 'fields': [{'name': 'is_active', 'type': 'int', 'rand': False}, {'name': 'scb_en', 'type': 'int', 'rand': False}]}, 'agents': [{'name': 'ahb_master', 'mode': 'active', 'type': 'in', 'interface': 'ahb_if', 'item': 'ahb_item'}, {'name': 'apb_monitor', 'mode': 'passive', 'type': 'out', 'interface': 'apb_if', 'item': 'apb_item'}], 'items': [{'name': 'ahb_item', 'fields': [{'name': 'addr', 'type': 'logic[31:0]', 'rand': True}, {'name': 'data', 'type': 'logic[31:0]', 'rand': True}, {'name': 'trans', 'type': 'logic[1:0]', 'rand': True}, {'name': 'write', 'type': 'logic', 'rand': True}], 'constraints': [{'name': 'trans_c', 'expr': 'trans inside {[0:3]}'}]}, {'name': 'apb_item', 'fields': [{'name': 'paddr', 'type': 'logic[31:0]', 'rand': False}, {'name': 'pwdata', 'type': 'logic[31:0]', 'rand': False}, {'name': 'prdata', 'type': 'logic[31:0]', 'rand': False}, {'name': 'pwrite', 'type': 'logic', 'rand': False}, {'name': 'psel', 'type': 'logic[8:0]', 'rand': False}]}], 'interfaces': [{'name': 'ahb_if', 'clock': 'hclk', 'clk_period': '10ns', 'reset': 'hreset_n', 'signals': [{'name': 'hsel', 'type': 'logic', 'dir': 'output'}, {'name': 'haddr', 'type': 'logic[31:0]', 'dir': 'output'}, {'name': 'htrans', 'type': 'logic[1:0]', 'dir': 'output'}, {'name': 'hwdata', 'type': 'logic[31:0]', 'dir': 'output'}, {'name': 'hwrite', 'type': 'logic', 'dir': 'output'}, {'name': 'hrdata', 'type': 'logic[31:0]', 'dir': 'input'}, {'name': 'hready', 'type': 'logic', 'dir': 'input'}, {'name': 'hresp', 'type': 'logic[1:0]', 'dir': 'input'}]}, {'name': 'apb_if', 'clock': 'hclk', 'clk_period': '10ns', 'reset': 'hreset_n', 'signals': [{'name': 'paddr', 'type': 'logic[31:0]', 'dir': 'input'}, {'name': 'penable', 'type': 'logic', 'dir': 'input'}, {'name': 'pwrite', 'type': 'logic', 'dir': 'input'}, {'name': 'pwdata', 'type': 'logic[31:0]', 'dir': 'input'}, {'name': 'psel', 'type': 'logic[8:0]', 'dir': 'input'}, {'name': 'pready', 'type': 'logic[8:0]', 'dir': 'output'}, {'name': 'prdata', 'type': 'logic[31:0]', 'dir': 'output'}]}], 'ref_model': {'name': 'ahb2apb_ref_model', 'input_item': ['ahb_item'], 'predicted_type': ['apb_item']}, 'scoreboard': {'name': 'ahb2apb_scoreboard', 'actual_type': ['apb_item'], 'expected_type': ['apb_item'], 'compare_method': 'byte_compare', 'error_tolerance': 0}, 'coverage': {'name': 'ahb2apb_coverage', 'groups': [{'name': 'ahb_cov', 'interface': ['ahb_if', 'hclk', 'hreset_n'], 'coverpoints': [{'name': 'addr_cp', 'expr': 'haddr', 'bins': [{'name': 'low', 'values': "{[0:'h0FFF]}"}, {'name': 'mid', 'values': "{['h1000:'hFFFF]}"}, {'name': 'high', 'values': "{['h10000:$]}"}]}, {'name': 'trans_cp', 'expr': 'htrans', 'bins': [{'name': 'idle', 'values': '{0}'}, {'name': 'busy', 'values': '{1}'}, {'name': 'nonseq', 'values': '{2}'}, {'name': 'seq', 'values': '{3}'}]}, {'name': 'write_cp', 'expr': 'hwrite', 'bins': [{'name': 'read', 'values': '{0}'}, {'name': 'write', 'values': '{1}'}]}], 'crosses': [{'name': 'addr_x_write', 'points': ['addr_cp', 'write_cp']}]}, {'name': 'apb_cov', 'interface': ['apb_if', 'hclk', 'hreset_n'], 'coverpoints': [{'name': 'paddr_cp', 'expr': 'paddr', 'bins': [{'name': 'low', 'values': "{[0:'h0FFF]}"}, {'name': 'high', 'values': "{['h1000:$]}"}]}, {'name': 'psel_cp', 'expr': 'psel', 'bins': [{'name': 'slave0', 'values': "{9'b000000001}"}, {'name': 'slave1', 'values': "{9'b000000010}"}, {'name': 'others', 'values': 'default'}]}]}]}}
+2026-03-19 07:34:44,534 - uvm_gen - INFO - Loading configuration from: config.yml
+2026-03-19 07:34:44,546 - uvm_gen - INFO - Configuration loaded successfully
+2026-03-19 07:34:44,546 - uvm_gen - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 07:34:44,546 - uvm_gen - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 07:34:44,546 - uvm_gen - INFO - Validating configuration content
+2026-03-19 07:34:44,546 - uvm_gen - INFO - Configuration validation passed
+2026-03-19 07:34:44,546 - uvm_gen - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.2/templates
+2026-03-19 07:34:44,546 - uvm_gen - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:04:55,937 - __main__ - INFO - Loading configuration from: config.yml
+2026-03-19 08:04:55,949 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 08:04:55,949 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 08:04:55,949 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 08:04:55,949 - __main__ - INFO - Validating configuration content
+2026-03-19 08:04:55,949 - __main__ - INFO - Configuration validation passed
+2026-03-19 08:04:55,949 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.1/templates
+2026-03-19 08:04:55,949 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:04:55,949 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 08:04:55,950 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:04:55,950 - __main__ - INFO - Generating data components...
+2026-03-19 08:04:55,950 - __main__ - INFO - Generating data components...
+2026-03-19 08:04:55,950 - __main__ - INFO - Generating interfaces...
+2026-03-19 08:04:55,954 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 08:04:55,956 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 08:04:55,956 - __main__ - INFO - Generating transaction items...
+2026-03-19 08:04:55,959 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 08:04:55,961 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 08:04:55,961 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 08:04:55,961 - __main__ - INFO - Generating agents...
+2026-03-19 08:04:55,961 - __main__ - INFO - Generating agents...
+2026-03-19 08:04:55,963 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_driver.sv
+2026-03-19 08:04:55,965 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_monitor.sv
+2026-03-19 08:04:55,967 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_sequencer.sv
+2026-03-19 08:04:55,969 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_agent.sv
+2026-03-19 08:04:55,970 - __main__ - INFO - Generated: uvm_tc/seq/ahb_sequence.sv
+2026-03-19 08:04:55,970 - __main__ - INFO - Successfully generated agent type: ahb
+2026-03-19 08:04:55,972 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_driver.sv
+2026-03-19 08:04:55,974 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_monitor.sv
+2026-03-19 08:04:55,975 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_sequencer.sv
+2026-03-19 08:04:55,977 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_agent.sv
+2026-03-19 08:04:55,979 - __main__ - INFO - Generated: uvm_tc/seq/apb_sequence.sv
+2026-03-19 08:04:55,979 - __main__ - INFO - Successfully generated agent type: apb
+2026-03-19 08:04:55,979 - __main__ - INFO - Generating common components...
+2026-03-19 08:04:55,979 - __main__ - INFO - Generating common components...
+2026-03-19 08:04:55,981 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 08:04:55,983 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 08:04:55,986 - __main__ - INFO - Generated: uvm_tb/ahb2apb_ref_model.sv
+2026-03-19 08:04:55,990 - __main__ - INFO - Generated: uvm_tb/ahb2apb_scoreboard.sv
+2026-03-19 08:04:55,994 - __main__ - INFO - Generated: uvm_tb/ahb2apb_coverage.sv
+2026-03-19 08:04:55,997 - __main__ - INFO - Generated: uvm_tb/ahb2apb_env.sv
+2026-03-19 08:04:55,999 - __main__ - INFO - Generated: uvm_tc/tc_base_test.sv
+2026-03-19 08:04:56,001 - __main__ - INFO - Generated: uvm_tc/tc_sanity.sv
+2026-03-19 08:04:56,001 - __main__ - INFO - Generating testbench...
+2026-03-19 08:04:56,001 - __main__ - INFO - Generating testbench...
+2026-03-19 08:04:56,001 - __main__ - INFO - Parsing RTL ports...
+2026-03-19 08:04:56,001 - rtl_parser - INFO - RTL_FILE_PATH:  /home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v
+2026-03-19 08:04:56,001 - rtl_parser - INFO - RTL_TOP_MODULE: ahb2apb
+2026-03-19 08:04:56,001 - rtl_parser - INFO - Parsing RTL file...
+2026-03-19 08:04:56,001 - rtl_parser - INFO - Parsed 41 ports from RTL
+2026-03-19 08:04:56,001 - __main__ - INFO - Parsed 41 ports from RTL
+2026-03-19 08:04:56,005 - __main__ - INFO - Generated: bench/tb_top.sv
+2026-03-19 08:04:56,005 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:04:56,005 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:04:56,005 - __main__ - INFO - Copied file list: rtl.f
+2026-03-19 08:04:56,005 - __main__ - INFO - Generated tb.f
+2026-03-19 08:04:56,007 - __main__ - INFO - UVM environment generation completed successfully!
+2026-03-19 08:05:38,858 - uvm_gen - INFO - Loading configuration from: config.yml
+2026-03-19 08:05:38,871 - uvm_gen - INFO - Configuration loaded successfully
+2026-03-19 08:05:38,871 - uvm_gen - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 08:05:38,871 - uvm_gen - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 08:05:38,871 - uvm_gen - INFO - Validating configuration content
+2026-03-19 08:05:38,871 - uvm_gen - INFO - Configuration validation passed
+2026-03-19 08:05:38,871 - uvm_gen - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.2/templates
+2026-03-19 08:05:38,871 - uvm_gen - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:06:32,260 - uvm_gen - INFO - Loading configuration from: config.yml
+2026-03-19 08:06:32,271 - uvm_gen - INFO - Configuration loaded successfully
+2026-03-19 08:06:32,272 - uvm_gen - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 08:06:32,272 - uvm_gen - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 08:06:32,272 - uvm_gen - INFO - Validating configuration content
+2026-03-19 08:06:32,272 - uvm_gen - INFO - Configuration validation passed
+2026-03-19 08:06:32,272 - uvm_gen - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.2/templates
+2026-03-19 08:06:32,272 - uvm_gen - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:07:01,231 - __main__ - INFO - Loading configuration from: config.yml
+2026-03-19 08:07:01,243 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 08:07:01,243 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 08:07:01,243 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 08:07:01,243 - __main__ - INFO - Validating configuration content
+2026-03-19 08:07:01,243 - __main__ - INFO - Configuration validation passed
+2026-03-19 08:07:01,243 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.2/templates
+2026-03-19 08:07:01,243 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:07:01,243 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 08:07:01,244 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:07:01,244 - __main__ - INFO - Generating data components...
+2026-03-19 08:07:01,244 - __main__ - INFO - Generating data components...
+2026-03-19 08:07:01,244 - __main__ - INFO - Generating interfaces...
+2026-03-19 08:07:01,248 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 08:07:01,251 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 08:07:01,251 - __main__ - INFO - Generating transaction items...
+2026-03-19 08:07:01,255 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 08:07:01,259 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 08:07:01,259 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 08:07:01,259 - __main__ - INFO - Generating agents...
+2026-03-19 08:07:01,259 - __main__ - INFO - Generating agents...
+2026-03-19 08:07:01,261 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_driver.sv
+2026-03-19 08:07:01,263 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_monitor.sv
+2026-03-19 08:07:01,265 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_sequencer.sv
+2026-03-19 08:07:01,268 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_agent.sv
+2026-03-19 08:07:01,270 - __main__ - INFO - Generated: uvm_tc/seq/ahb_sequence.sv
+2026-03-19 08:07:01,270 - __main__ - INFO - Successfully generated agent type: ahb
+2026-03-19 08:07:01,272 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_driver.sv
+2026-03-19 08:07:01,273 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_monitor.sv
+2026-03-19 08:07:01,275 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_sequencer.sv
+2026-03-19 08:07:01,277 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_agent.sv
+2026-03-19 08:07:01,278 - __main__ - INFO - Generated: uvm_tc/seq/apb_sequence.sv
+2026-03-19 08:07:01,279 - __main__ - INFO - Successfully generated agent type: apb
+2026-03-19 08:07:01,279 - __main__ - INFO - Generating common components...
+2026-03-19 08:07:01,279 - __main__ - INFO - Generating common components...
+2026-03-19 08:07:01,281 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 08:07:01,283 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 08:07:01,287 - __main__ - INFO - Generated: uvm_tb/ahb2apb_ref_model.sv
+2026-03-19 08:07:01,291 - __main__ - INFO - Generated: uvm_tb/ahb2apb_scoreboard.sv
+2026-03-19 08:07:01,295 - __main__ - INFO - Generated: uvm_tb/ahb2apb_coverage.sv
+2026-03-19 08:07:01,299 - __main__ - INFO - Generated: uvm_tb/ahb2apb_env.sv
+2026-03-19 08:07:01,302 - __main__ - INFO - Generated: uvm_tc/tc_base_test.sv
+2026-03-19 08:07:01,304 - __main__ - INFO - Generated: uvm_tc/tc_sanity.sv
+2026-03-19 08:07:01,304 - __main__ - INFO - Generating testbench...
+2026-03-19 08:07:01,304 - __main__ - INFO - Generating testbench...
+2026-03-19 08:07:01,304 - __main__ - INFO - Parsing RTL ports...
+2026-03-19 08:07:01,304 - rtl_parser - INFO - RTL_FILE_PATH:  /home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v
+2026-03-19 08:07:01,304 - rtl_parser - INFO - RTL_TOP_MODULE: ahb2apb
+2026-03-19 08:07:01,304 - rtl_parser - INFO - Parsing RTL file...
+2026-03-19 08:07:01,305 - rtl_parser - INFO - Parsed 41 ports from RTL
+2026-03-19 08:07:01,305 - __main__ - INFO - Parsed 41 ports from RTL
+2026-03-19 08:07:01,309 - __main__ - INFO - Generated: bench/tb_top.sv
+2026-03-19 08:07:01,309 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:07:01,309 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:07:01,311 - __main__ - INFO - Copied file list: rtl.f
+2026-03-19 08:07:01,311 - __main__ - INFO - Generated tb.f
+2026-03-19 08:07:01,313 - __main__ - INFO - UVM environment generation completed successfully!
+2026-03-19 08:08:24,923 - __main__ - INFO - Loading configuration from: config.yml
+2026-03-19 08:08:24,940 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 08:08:24,940 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 08:08:24,940 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 08:08:24,940 - __main__ - INFO - Validating configuration content
+2026-03-19 08:08:24,940 - __main__ - INFO - Configuration validation passed
+2026-03-19 08:08:24,940 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.2/templates
+2026-03-19 08:08:24,940 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:08:24,940 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 08:08:24,940 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:08:24,940 - __main__ - INFO - Generating data components...
+2026-03-19 08:08:24,940 - __main__ - INFO - Generating data components...
+2026-03-19 08:08:24,940 - __main__ - INFO - Generating interfaces...
+2026-03-19 08:08:24,945 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 08:08:24,947 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 08:08:24,947 - __main__ - INFO - Generating transaction items...
+2026-03-19 08:08:24,951 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 08:08:24,955 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 08:08:24,955 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 08:08:24,955 - __main__ - INFO - Generating agents...
+2026-03-19 08:08:24,955 - __main__ - INFO - Generating agents...
+2026-03-19 08:08:24,957 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_driver.sv
+2026-03-19 08:08:24,958 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_monitor.sv
+2026-03-19 08:08:24,960 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_sequencer.sv
+2026-03-19 08:08:24,962 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_agent.sv
+2026-03-19 08:08:24,964 - __main__ - INFO - Generated: uvm_tc/seq/ahb_sequence.sv
+2026-03-19 08:08:24,964 - __main__ - INFO - Successfully generated agent type: ahb
+2026-03-19 08:08:24,965 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_driver.sv
+2026-03-19 08:08:24,967 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_monitor.sv
+2026-03-19 08:08:24,969 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_sequencer.sv
+2026-03-19 08:08:24,971 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_agent.sv
+2026-03-19 08:08:24,973 - __main__ - INFO - Generated: uvm_tc/seq/apb_sequence.sv
+2026-03-19 08:08:24,973 - __main__ - INFO - Successfully generated agent type: apb
+2026-03-19 08:08:24,973 - __main__ - INFO - Generating common components...
+2026-03-19 08:08:24,973 - __main__ - INFO - Generating common components...
+2026-03-19 08:08:24,975 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 08:08:24,977 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 08:08:24,981 - __main__ - INFO - Generated: uvm_tb/ahb2apb_ref_model.sv
+2026-03-19 08:08:24,987 - __main__ - INFO - Generated: uvm_tb/ahb2apb_scoreboard.sv
+2026-03-19 08:08:24,992 - __main__ - INFO - Generated: uvm_tb/ahb2apb_coverage.sv
+2026-03-19 08:08:24,996 - __main__ - INFO - Generated: uvm_tb/ahb2apb_env.sv
+2026-03-19 08:08:24,998 - __main__ - INFO - Generated: uvm_tc/tc_base_test.sv
+2026-03-19 08:08:25,000 - __main__ - INFO - Generated: uvm_tc/tc_sanity.sv
+2026-03-19 08:08:25,000 - __main__ - INFO - Generating testbench...
+2026-03-19 08:08:25,000 - __main__ - INFO - Generating testbench...
+2026-03-19 08:08:25,000 - __main__ - INFO - Parsing RTL ports...
+2026-03-19 08:08:25,000 - rtl_parser - INFO - RTL_FILE_PATH:  /home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v
+2026-03-19 08:08:25,000 - rtl_parser - INFO - RTL_TOP_MODULE: ahb2apb
+2026-03-19 08:08:25,000 - rtl_parser - INFO - Parsing RTL file...
+2026-03-19 08:08:25,001 - rtl_parser - INFO - Parsed 41 ports from RTL
+2026-03-19 08:08:25,001 - __main__ - INFO - Parsed 41 ports from RTL
+2026-03-19 08:08:25,005 - __main__ - INFO - Generated: bench/tb_top.sv
+2026-03-19 08:08:25,005 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:08:25,005 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:08:25,005 - __main__ - INFO - Copied file list: rtl.f
+2026-03-19 08:08:25,006 - __main__ - INFO - Generated tb.f
+2026-03-19 08:08:25,008 - __main__ - INFO - UVM environment generation completed successfully!
+2026-03-19 08:17:13,883 - __main__ - WARNING - UVM_GEN_DIR (/home/IC_verify/script/uvm_gen_v1.1) does not match script directory (/home/IC_verify/script/uvm_gen_v1.2). This may cause template version mismatch issues!
+2026-03-19 08:17:13,884 - __main__ - INFO - Loading configuration from: config.yml
+2026-03-19 08:17:13,896 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 08:17:13,896 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 08:17:13,896 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 08:17:13,896 - __main__ - INFO - Validating configuration content
+2026-03-19 08:17:13,896 - __main__ - INFO - Configuration validation passed
+2026-03-19 08:17:13,896 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.1/templates
+2026-03-19 08:17:13,896 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:17:13,896 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 08:17:13,896 - __main__ - WARNING - Output directory is inside script directory. This may cause issues with version control.
+2026-03-19 08:17:13,896 - __main__ - INFO - Existing output directory found. Creating backup: /home/IC_verify/script/uvm_gen_v1.2/demo_backup_ahb2apb
+2026-03-19 08:17:14,004 - __main__ - INFO - Backup created successfully: /home/IC_verify/script/uvm_gen_v1.2/demo_backup_ahb2apb
+2026-03-19 08:17:14,004 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:17:14,005 - __main__ - INFO - Generating data components...
+2026-03-19 08:17:14,005 - __main__ - INFO - Generating data components...
+2026-03-19 08:17:14,005 - __main__ - INFO - Generating interfaces...
+2026-03-19 08:17:14,010 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 08:17:14,013 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 08:17:14,013 - __main__ - INFO - Generating transaction items...
+2026-03-19 08:17:14,016 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 08:17:14,018 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 08:17:14,018 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 08:17:14,018 - __main__ - INFO - Generating agents...
+2026-03-19 08:17:14,018 - __main__ - INFO - Generating agents...
+2026-03-19 08:17:14,021 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_driver.sv
+2026-03-19 08:17:14,023 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_monitor.sv
+2026-03-19 08:17:14,025 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_sequencer.sv
+2026-03-19 08:17:14,027 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_agent.sv
+2026-03-19 08:17:14,029 - __main__ - INFO - Generated: uvm_tc/seq/ahb_sequence.sv
+2026-03-19 08:17:14,029 - __main__ - INFO - Successfully generated agent type: ahb
+2026-03-19 08:17:14,031 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_driver.sv
+2026-03-19 08:17:14,033 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_monitor.sv
+2026-03-19 08:17:14,034 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_sequencer.sv
+2026-03-19 08:17:14,036 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_agent.sv
+2026-03-19 08:17:14,037 - __main__ - INFO - Generated: uvm_tc/seq/apb_sequence.sv
+2026-03-19 08:17:14,037 - __main__ - INFO - Successfully generated agent type: apb
+2026-03-19 08:17:14,037 - __main__ - INFO - Generating common components...
+2026-03-19 08:17:14,037 - __main__ - INFO - Generating common components...
+2026-03-19 08:17:14,040 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 08:17:14,042 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 08:17:14,046 - __main__ - INFO - Generated: uvm_tb/ahb2apb_ref_model.sv
+2026-03-19 08:17:14,051 - __main__ - INFO - Generated: uvm_tb/ahb2apb_scoreboard.sv
+2026-03-19 08:17:14,055 - __main__ - INFO - Generated: uvm_tb/ahb2apb_coverage.sv
+2026-03-19 08:17:14,059 - __main__ - INFO - Generated: uvm_tb/ahb2apb_env.sv
+2026-03-19 08:17:14,062 - __main__ - INFO - Generated: uvm_tc/tc_base_test.sv
+2026-03-19 08:17:14,064 - __main__ - INFO - Generated: uvm_tc/tc_sanity.sv
+2026-03-19 08:17:14,064 - __main__ - INFO - Generating testbench...
+2026-03-19 08:17:14,064 - __main__ - INFO - Generating testbench...
+2026-03-19 08:17:14,064 - __main__ - INFO - Parsing RTL ports...
+2026-03-19 08:17:14,064 - rtl_parser - INFO - RTL_FILE_PATH:  /home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v
+2026-03-19 08:17:14,064 - rtl_parser - INFO - RTL_TOP_MODULE: ahb2apb
+2026-03-19 08:17:14,064 - rtl_parser - INFO - Parsing RTL file...
+2026-03-19 08:17:14,065 - rtl_parser - INFO - Parsed 41 ports from RTL
+2026-03-19 08:17:14,065 - __main__ - INFO - Parsed 41 ports from RTL
+2026-03-19 08:17:14,069 - __main__ - INFO - Generated: bench/tb_top.sv
+2026-03-19 08:17:14,069 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:17:14,069 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:17:14,072 - __main__ - INFO - Copied file list: rtl.f
+2026-03-19 08:17:14,072 - __main__ - INFO - Generated tb.f
+2026-03-19 08:17:14,075 - __main__ - INFO - UVM environment generation completed successfully!
+2026-03-19 08:17:51,636 - __main__ - WARNING - UVM_GEN_DIR (/home/IC_verify/script/uvm_gen_v1.1) does not match script directory (/home/IC_verify/script/uvm_gen_v1.2). Auto-correcting to script directory to prevent template version mismatch.
+2026-03-19 08:17:51,636 - __main__ - INFO - Loading configuration from: config.yml
+2026-03-19 08:17:51,648 - __main__ - INFO - Configuration loaded successfully
+2026-03-19 08:17:51,648 - __main__ - INFO - Using legacy agent format (auto-migrating to new format)
+2026-03-19 08:17:51,648 - __main__ - INFO - Parsed 2 agent types, 2 instances
+2026-03-19 08:17:51,648 - __main__ - INFO - Validating configuration content
+2026-03-19 08:17:51,648 - __main__ - INFO - Configuration validation passed
+2026-03-19 08:17:51,648 - __main__ - INFO - Template directory validated: /home/IC_verify/script/uvm_gen_v1.2/templates
+2026-03-19 08:17:51,648 - __main__ - INFO - Output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:17:51,648 - __main__ - INFO - Starting UVM environment generation...
+2026-03-19 08:17:51,648 - __main__ - WARNING - Output directory is inside script directory. This may cause issues with version control.
+2026-03-19 08:17:51,648 - __main__ - INFO - Existing output directory found. Creating backup: /home/IC_verify/script/uvm_gen_v1.2/demo_backup_ahb2apb
+2026-03-19 08:17:51,697 - __main__ - INFO - Backup created successfully: /home/IC_verify/script/uvm_gen_v1.2/demo_backup_ahb2apb
+2026-03-19 08:17:51,697 - __main__ - INFO - Created output directory: /home/IC_verify/script/uvm_gen_v1.2/demo
+2026-03-19 08:17:51,698 - __main__ - INFO - Generating data components...
+2026-03-19 08:17:51,698 - __main__ - INFO - Generating data components...
+2026-03-19 08:17:51,698 - __main__ - INFO - Generating interfaces...
+2026-03-19 08:17:51,702 - __main__ - INFO - Generated: uvm_tb/interfaces/ahb_if.sv
+2026-03-19 08:17:51,705 - __main__ - INFO - Generated: uvm_tb/interfaces/apb_if.sv
+2026-03-19 08:17:51,705 - __main__ - INFO - Generating transaction items...
+2026-03-19 08:17:51,709 - __main__ - INFO - Generated: uvm_tb/items/ahb_item.sv
+2026-03-19 08:17:51,712 - __main__ - INFO - Generated: uvm_tb/items/apb_item.sv
+2026-03-19 08:17:51,712 - __main__ - INFO - Generated 2 interfaces and 2 items
+2026-03-19 08:17:51,712 - __main__ - INFO - Generating agents...
+2026-03-19 08:17:51,712 - __main__ - INFO - Generating agents...
+2026-03-19 08:17:51,715 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_driver.sv
+2026-03-19 08:17:51,717 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_monitor.sv
+2026-03-19 08:17:51,718 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_sequencer.sv
+2026-03-19 08:17:51,721 - __main__ - INFO - Generated: uvm_tb/ahb_agent/ahb_agent.sv
+2026-03-19 08:17:51,723 - __main__ - INFO - Generated: uvm_tc/seq/ahb_sequence.sv
+2026-03-19 08:17:51,723 - __main__ - INFO - Successfully generated agent type: ahb
+2026-03-19 08:17:51,725 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_driver.sv
+2026-03-19 08:17:51,726 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_monitor.sv
+2026-03-19 08:17:51,728 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_sequencer.sv
+2026-03-19 08:17:51,730 - __main__ - INFO - Generated: uvm_tb/apb_agent/apb_agent.sv
+2026-03-19 08:17:51,731 - __main__ - INFO - Generated: uvm_tc/seq/apb_sequence.sv
+2026-03-19 08:17:51,731 - __main__ - INFO - Successfully generated agent type: apb
+2026-03-19 08:17:51,731 - __main__ - INFO - Generating common components...
+2026-03-19 08:17:51,731 - __main__ - INFO - Generating common components...
+2026-03-19 08:17:51,734 - __main__ - INFO - Generated: uvm_tb/top_cfg.sv
+2026-03-19 08:17:51,736 - __main__ - INFO - Generated: uvm_tb/virtual_sequencer.sv
+2026-03-19 08:17:51,740 - __main__ - INFO - Generated: uvm_tb/ahb2apb_ref_model.sv
+2026-03-19 08:17:51,744 - __main__ - INFO - Generated: uvm_tb/ahb2apb_scoreboard.sv
+2026-03-19 08:17:51,749 - __main__ - INFO - Generated: uvm_tb/ahb2apb_coverage.sv
+2026-03-19 08:17:51,753 - __main__ - INFO - Generated: uvm_tb/ahb2apb_env.sv
+2026-03-19 08:17:51,755 - __main__ - INFO - Generated: uvm_tc/tc_base_test.sv
+2026-03-19 08:17:51,757 - __main__ - INFO - Generated: uvm_tc/tc_sanity.sv
+2026-03-19 08:17:51,757 - __main__ - INFO - Generating testbench...
+2026-03-19 08:17:51,757 - __main__ - INFO - Generating testbench...
+2026-03-19 08:17:51,757 - __main__ - INFO - Parsing RTL ports...
+2026-03-19 08:17:51,757 - rtl_parser - INFO - RTL_FILE_PATH:  /home/IC_verify/script/uvm_gen_v1.2/rtl/ahb2apb.v
+2026-03-19 08:17:51,757 - rtl_parser - INFO - RTL_TOP_MODULE: ahb2apb
+2026-03-19 08:17:51,757 - rtl_parser - INFO - Parsing RTL file...
+2026-03-19 08:17:51,758 - rtl_parser - INFO - Parsed 41 ports from RTL
+2026-03-19 08:17:51,758 - __main__ - INFO - Parsed 41 ports from RTL
+2026-03-19 08:17:51,763 - __main__ - INFO - Generated: bench/tb_top.sv
+2026-03-19 08:17:51,763 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:17:51,763 - __main__ - INFO - Generating simulation scripts...
+2026-03-19 08:17:51,764 - __main__ - INFO - Copied file list: rtl.f
+2026-03-19 08:17:51,764 - __main__ - INFO - Generated tb.f
+2026-03-19 08:17:51,766 - __main__ - INFO - UVM environment generation completed successfully!
